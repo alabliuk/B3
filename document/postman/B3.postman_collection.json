@@ -1,0 +1,75 @@
+{
+	"info": {
+		"_postman_id": "30b8325b-69a7-4e4a-8114-e4ecc48992fb",
+		"name": "B3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Asset List",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://cotacoes.economia.uol.com.br/ws/asset/stock/list?size=100000",
+					"protocol": "http",
+					"host": [
+						"cotacoes",
+						"economia",
+						"uol",
+						"com",
+						"br"
+					],
+					"path": [
+						"ws",
+						"asset",
+						"stock",
+						"list"
+					],
+					"query": [
+						{
+							"key": "size",
+							"value": "100000"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IntradayExample",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://cotacoes.economia.uol.com.br/ws/asset/484/intraday?size=10&callback=uolfinancecallback0",
+					"protocol": "http",
+					"host": [
+						"cotacoes",
+						"economia",
+						"uol",
+						"com",
+						"br"
+					],
+					"path": [
+						"ws",
+						"asset",
+						"484",
+						"intraday"
+					],
+					"query": [
+						{
+							"key": "size",
+							"value": "10"
+						},
+						{
+							"key": "callback",
+							"value": "uolfinancecallback0"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
