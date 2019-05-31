@@ -8,10 +8,14 @@ namespace AssetData
     {
         static void Main(string[] args)
         {
+            new Program().StartApp();
+        }
+
+        public void StartApp()
+        {
             try
             {
                 int UserInputNumber = new MainMenu().Render();
-
                 Console.Clear();
                 switch (UserInputNumber)
                 {
@@ -20,6 +24,10 @@ namespace AssetData
                         Console.WriteLine("\tLOAD ASSETS - " + DateTime.Now);
                         new AssetController().AssetManager();
                         Console.WriteLine("=================================================");
+                        break;
+
+                    case 2:
+                        new StockQuote().Render();
                         break;
 
                     case 6:

@@ -76,6 +76,8 @@ namespace AssetData.Business
                 Console.WriteLine("Ativos Atualizados Com Sucesso: " + update);
                 Console.WriteLine("Ativos Sem Alteração: " + discard);
                 Console.WriteLine("Ativos Com Erro: " + error);
+
+                new UI.MainMenu().GoBackMainMenu();
             }
             catch (Exception e)
             {

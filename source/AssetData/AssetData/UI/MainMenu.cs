@@ -6,9 +6,10 @@ namespace AssetData.UI
     {
         public int Render()
         {
+            Console.Clear();
             Console.ForegroundColor = ConsoleColor.Red;
 
-            Console.Write("▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ Asset Service v0.1 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒");
+            Console.Write("▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ Asset Service v0.1 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒");
 
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("\n");
@@ -41,6 +42,37 @@ namespace AssetData.UI
             }
 
             return UserInputNumber;
+        }
+
+        public void GoBackMainMenu()
+        {
+            Console.WriteLine("\n");
+            Console.WriteLine("╔═══════════════════════════════════════════════╗");
+            Console.WriteLine("║ 1 GO BACK TO MENU                             ║");
+            Console.WriteLine("║                                               ║");
+            Console.WriteLine("║ 2 EXIT                                        ║");
+            Console.WriteLine("╚═══════════════════════════════════════════════╝");
+
+            Console.WriteLine("\n");
+            Console.Write("Insert key value : ");
+
+            //>Valida entrada do usuario
+            ConsoleKey UserInput = Console.ReadKey(true).Key;
+            switch (UserInput)
+            {
+                case ConsoleKey.D1:
+                    new Program().StartApp();
+                    break;
+
+                case ConsoleKey.D2:
+                    Environment.Exit(0);
+                    break;
+
+                default:
+                    Console.WriteLine("\nInvalid input value... Try Again!");
+                    new MainMenu().GoBackMainMenu();
+                    break;
+            }
         }
     }
 }
