@@ -44,8 +44,11 @@ namespace AssetData.UI
             return UserInputNumber;
         }
 
-        public void GoBackMainMenu()
+        public void GoBackMainMenu(string outputMsg = null)
         {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(outputMsg);
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("\n");
             Console.WriteLine("╔═══════════════════════════════════════════════╗");
             Console.WriteLine("║ 1 GO BACK TO MENU                             ║");
@@ -61,16 +64,17 @@ namespace AssetData.UI
             switch (UserInput)
             {
                 case ConsoleKey.D1:
+                case ConsoleKey.NumPad1:
                     new Program().StartApp();
                     break;
 
                 case ConsoleKey.D2:
+                case ConsoleKey.NumPad2:
                     Environment.Exit(0);
                     break;
 
                 default:
-                    Console.WriteLine("\nInvalid input value... Try Again!");
-                    new MainMenu().GoBackMainMenu();
+                    new MainMenu().GoBackMainMenu("\nInvalid input value... Try Again!");
                     break;
             }
         }

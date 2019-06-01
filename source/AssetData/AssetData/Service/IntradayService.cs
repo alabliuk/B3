@@ -3,12 +3,12 @@ using System.Net.Http;
 
 namespace AssetData.Service
 {
-    class AssetService
+    class IntradayService
     {
-        public string GetAllAssetsApi()
+        public string GetIntraday()
         {
             var config = new Utils().ReadTokensAppsettings();
-            var _urlBase = config.GetSection("API_Access:UrlBase").Value + "/stock/list?size=10000";
+            var _urlBase = config.GetSection("API_Access:UrlBase").Value + "/484/intraday?size=3&callback=uolfinancecallback0";
 
             HttpResponseMessage respApi;
             string respApiJson = string.Empty;

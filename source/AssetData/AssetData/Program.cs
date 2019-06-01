@@ -44,7 +44,7 @@ namespace AssetData
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("\n\n\t ERROR");
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine(" --> " + e.Message);
+                Console.WriteLine(" ||> " + DateTime.Now + " --> " + e.Message);
                 Console.ReadKey();
             }
         }

@@ -10,92 +10,84 @@ namespace AssetData.Business
     {
         public void AssetManager()
         {
-            try
+            int create = 0;
+            int update = 0;
+            int error = 0;
+            int discard = 0;
+
+            Console.WriteLine("\nCarregando lista de ativos...");
+            Asset assetsApi = GetAllAssets();
+
+            for (int x = 0; x < assetsApi.data.Count; x++)
             {
-                int create = 0;
-                int update = 0;
-                int error = 0;
-                int discard = 0;
-
-                Asset assetsApi = GetAllAssets();
-
-                for (int x = 0; x < assetsApi.data.Count; x++)
+                bool isAvailable = new AssetRepository().AssetVerification(assetsApi.data[x].idt);
+                if (isAvailable)
                 {
-                    bool isAvailable = new AssetRepository().AssetVerification(assetsApi.data[x].idt);
-
-                    if (isAvailable)
+                    try
                     {
-                        try
+                        bool isUpdated = new AssetRepository().AssetIsUpdated(assetsApi.data[x]);
+                        if (isUpdated)
                         {
-                            bool isUpdated = new AssetRepository().AssetIsUpdated(assetsApi.data[x]);
+                            //Captura os dados antigos
+                            AssetItem assetOld = new AssetRepository().AssetGetOld(assetsApi.data[x].idt);
 
-                            if (isUpdated)
-                            {
-                                //Captura os dados antigos
-                                AssetItem assetOld = new AssetRepository().AssetGetOld(assetsApi.data[x].idt);
+                            //Salva os dados antigos na tabela de log (Historico do ativo)
+                            new AssetRepository().AssetSaveLog(assetOld);
 
-                                //Salva os dados antigos na tabela de log (Historico do ativo)
-                                new AssetRepository().AssetSaveLog(assetOld);
+                            //Atualiza as novas informações na tabela de ativo
+                            new AssetRepository().AssetUpdate(assetsApi.data[x]);
 
-                                //Atualiza as novas informações na tabela de ativo
-                                new AssetRepository().AssetUpdate(assetsApi.data[x]);
-
-                                Console.WriteLine("Ativo atualizado com sucesso: " + assetsApi.data[x].code + " - " + assetsApi.data[x].companyName);
-                                update++;
-                            }
-                            else
-                            {
-                                Console.WriteLine("Ativo sem Alteração: " + assetsApi.data[x].code + " - " + assetsApi.data[x].companyName);
-                                discard++;
-                            }
+                            Console.WriteLine("Ativo atualizado com sucesso: " + assetsApi.data[x].code + " - " + assetsApi.data[x].companyName);
+                            update++;
                         }
-                        catch (Exception e)
+                        else
                         {
-                            Console.WriteLine("ERRO: " + assetsApi.data[x].code + " - " + assetsApi.data[x].companyName + " --> " + e.Message);
-                            error++;
+                            Console.WriteLine("Ativo sem Alteração: " + assetsApi.data[x].code + " - " + assetsApi.data[x].companyName);
+                            discard++;
                         }
                     }
-                    else
+                    catch (Exception e)
                     {
-                        try
-                        {
-                            new AssetRepository().AssetSave(assetsApi.data[x]);
-                            Console.WriteLine("Ativo cadastrado com sucesso: " + assetsApi.data[x].code + " - " + assetsApi.data[x].companyName);
-                            create++;
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(assetsApi.data[x].code + " - " + assetsApi.data[x].companyName + ": ERRO --> " + e.Message);
-                            error++;
-                        }
+                        Console.WriteLine("ERRO: " + assetsApi.data[x].code + " - " + assetsApi.data[x].companyName + " --> " + e.Message);
+                        error++;
                     }
                 }
-
-                Console.WriteLine("\n\n");
-                Console.WriteLine("Ativos Cadastrados Com Sucesso: " + create);
-                Console.WriteLine("Ativos Atualizados Com Sucesso: " + update);
-                Console.WriteLine("Ativos Sem Alteração: " + discard);
-                Console.WriteLine("Ativos Com Erro: " + error);
-
-                new UI.MainMenu().GoBackMainMenu();
+                else
+                {
+                    try
+                    {
+                        new AssetRepository().AssetSave(assetsApi.data[x]);
+                        Console.WriteLine("Ativo cadastrado com sucesso: " + assetsApi.data[x].code + " - " + assetsApi.data[x].companyName);
+                        create++;
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(assetsApi.data[x].code + " - " + assetsApi.data[x].companyName + ": ERRO --> " + e.Message);
+                        error++;
+                    }
+                }
             }
-            catch (Exception e)
-            {
-                throw e;
-            }
+
+            Console.WriteLine("\n\n");
+            Console.WriteLine("Ativos Cadastrados Com Sucesso: " + create);
+            Console.WriteLine("Ativos Atualizados Com Sucesso: " + update);
+            Console.WriteLine("Ativos Sem Alteração: " + discard);
+            Console.WriteLine("Ativos Com Erro: " + error);
+
+            new UI.MainMenu().GoBackMainMenu();
         }
-
 
         public Asset GetAllAssets()
         {
-            Console.WriteLine("\nCarregando lista de ativos...");
             Asset asset = new Asset();
-            string respApiJson = new AssetService().GetAllAssetsApi();
+            string urlRequest = new Utils().UrlBuild("API_Access:UrlBase", "API_Access:AssetService");
+            string respApiJson = new ServiceRequester().GetRequest(urlRequest);
 
             if (!string.IsNullOrEmpty(respApiJson))
             {
                 asset = JsonConvert.DeserializeObject<Asset>(respApiJson);
             }
+
             return asset;
         }
     }

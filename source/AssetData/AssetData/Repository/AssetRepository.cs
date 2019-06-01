@@ -1,7 +1,6 @@
 ﻿using AssetData.Model;
 using AssetData.Service;
 using Dapper;
-using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -59,32 +58,25 @@ namespace AssetData.Repository
 
         public void AssetSave(AssetItem assets)
         {
-            try
+            var config = new Utils().ReadTokensAppsettings();
+            string strConnectionString = config.GetSection("Conn:DB").Value;
+
+            string sql = "INSERT INTO ASSETS (idt, code, asset, companyName, companyAbvName, createDate, updateDate) " +
+                "VALUES (@idt, @code, @asset, @companyName, @companyAbvName, GETDATE(), GETDATE())";
+
+            using (IDbConnection conn = new SqlConnection(strConnectionString))
             {
-                var config = new Utils().ReadTokensAppsettings();
-                string strConnectionString = config.GetSection("Conn:DB").Value;
+                var vParams = new DynamicParameters();
+                vParams.Add("@idt", assets.idt);
+                vParams.Add("@code", assets.code.TrimEnd());
+                vParams.Add("@asset", assets.code.Replace(".SA", "").TrimEnd());
+                vParams.Add("@companyName", assets.companyName.TrimEnd());
+                vParams.Add("@companyAbvName", assets.companyAbvName.TrimEnd());
 
-                string sql = "INSERT INTO ASSETS (idt, code, asset, companyName, companyAbvName, createDate, updateDate) " +
-                    "VALUES (@idt, @code, @asset, @companyName, @companyAbvName, GETDATE(), GETDATE())";
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
 
-                using (IDbConnection conn = new SqlConnection(strConnectionString))
-                {
-                    var vParams = new DynamicParameters();
-                    vParams.Add("@idt", assets.idt);
-                    vParams.Add("@code", assets.code.TrimEnd());
-                    vParams.Add("@asset", assets.code.Replace(".SA", "").TrimEnd());
-                    vParams.Add("@companyName", assets.companyName.TrimEnd());
-                    vParams.Add("@companyAbvName", assets.companyAbvName.TrimEnd());
-
-                    if (conn.State == ConnectionState.Closed)
-                        conn.Open();
-
-                    conn.Query<int>(sql, vParams).FirstOrDefault();
-                }
-            }
-            catch (Exception e)
-            {
-                throw e;
+                conn.Query<int>(sql, vParams).FirstOrDefault();
             }
         }
 
@@ -112,32 +104,25 @@ namespace AssetData.Repository
 
         public void AssetSaveLog(AssetItem assetOld)
         {
-            try
+            var config = new Utils().ReadTokensAppsettings();
+            string strConnectionString = config.GetSection("Conn:DB").Value;
+
+            string sqlInsert = "INSERT INTO AssetsUpdateLog (idt, code, asset, companyName, companyAbvName, createDate) " +
+                "VALUES (@idt, @code, @asset, @companyName, @companyAbvName, GETDATE())";
+
+            using (IDbConnection conn = new SqlConnection(strConnectionString))
             {
-                var config = new Utils().ReadTokensAppsettings();
-                string strConnectionString = config.GetSection("Conn:DB").Value;
+                var vParams = new DynamicParameters();
+                vParams.Add("@idt", assetOld.idt);
+                vParams.Add("@code", assetOld.code.TrimEnd());
+                vParams.Add("@asset", assetOld.code.Replace(".SA", "").TrimEnd());
+                vParams.Add("@companyName", assetOld.companyName.TrimEnd());
+                vParams.Add("@companyAbvName", assetOld.companyAbvName.TrimEnd());
 
-                string sqlInsert = "INSERT INTO AssetsUpdateLog (idt, code, asset, companyName, companyAbvName, createDate) " +
-                    "VALUES (@idt, @code, @asset, @companyName, @companyAbvName, GETDATE())";
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
 
-                using (IDbConnection conn = new SqlConnection(strConnectionString))
-                {
-                    var vParams = new DynamicParameters();
-                    vParams.Add("@idt", assetOld.idt);
-                    vParams.Add("@code", assetOld.code.TrimEnd());
-                    vParams.Add("@asset", assetOld.code.Replace(".SA", "").TrimEnd());
-                    vParams.Add("@companyName", assetOld.companyName.TrimEnd());
-                    vParams.Add("@companyAbvName", assetOld.companyAbvName.TrimEnd());
-
-                    if (conn.State == ConnectionState.Closed)
-                        conn.Open();
-
-                    conn.Query<int>(sqlInsert, vParams).FirstOrDefault();
-                }
-            }
-            catch (Exception e)
-            {
-                throw e;
+                conn.Query<int>(sqlInsert, vParams).FirstOrDefault();
             }
         }
 

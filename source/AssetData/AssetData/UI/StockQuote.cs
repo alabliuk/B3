@@ -1,12 +1,16 @@
-﻿using System;
+﻿using AssetData.Business;
+using System;
 
 namespace AssetData.UI
 {
     class StockQuote
     {
-        public void Render()
+        public void Render(string outputMsg = null)
         {
             Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(outputMsg);
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine("\n");
             Console.WriteLine("╔═══════════════════════════════════════════════╗");
             Console.WriteLine("║ 1 INTRADAY                                    ║");
@@ -23,13 +27,35 @@ namespace AssetData.UI
             Console.WriteLine("║                                               ║");
             Console.WriteLine("║ 7 INTERDAY (ALL)                              ║");
             Console.WriteLine("║                                               ║");
-            Console.WriteLine("║ 8 EXIT                                        ║");
+            Console.WriteLine("║ 8 GO BACK TO MENU                             ║");
+            Console.WriteLine("║                                               ║");
+            Console.WriteLine("║ 9 EXIT                                        ║");
             Console.WriteLine("╚═══════════════════════════════════════════════╝");
             Console.WriteLine("\n");
             Console.Write("Insert key value : ");
 
-            Console.ReadKey();
+            ConsoleKey UserInput = Console.ReadKey(true).Key;
+            switch (UserInput)
+            {
+                case ConsoleKey.D1:
+                case ConsoleKey.NumPad1:
+                    new IntradayController().IntradayManager();
+                    break;
 
+                case ConsoleKey.D8:
+                case ConsoleKey.NumPad8:
+                    new Program().StartApp();
+                    break;
+
+                case ConsoleKey.D9:
+                case ConsoleKey.NumPad9:
+                    Environment.Exit(0);
+                    break;
+
+                default:
+                    new StockQuote().Render("\n\tInvalid input value... Try Again!");
+                    break;
+            }
         }
     }
 }
