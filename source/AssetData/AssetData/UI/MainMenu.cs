@@ -12,7 +12,7 @@ namespace AssetData.UI
             Console.Write("▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ Asset Service v0.1 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒");
 
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("\n");
+            Console.WriteLine("\n\n\n");
             Console.WriteLine("╔═══════════════════════════════════════════════╗");
             Console.WriteLine("║ 1 LOAD ASSETS                                 ║");
             Console.WriteLine("║                                               ║");
@@ -44,18 +44,15 @@ namespace AssetData.UI
             return UserInputNumber;
         }
 
-        public void GoBackMainMenu(string outputMsg = null)
+        public void GoBackMainMenu(string outputMsg = null, string status = null)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(outputMsg);
-            Console.ForegroundColor = ConsoleColor.White;
+            new LineColor().Render(outputMsg, status);
             Console.WriteLine("\n");
             Console.WriteLine("╔═══════════════════════════════════════════════╗");
             Console.WriteLine("║ 1 GO BACK TO MENU                             ║");
             Console.WriteLine("║                                               ║");
             Console.WriteLine("║ 2 EXIT                                        ║");
             Console.WriteLine("╚═══════════════════════════════════════════════╝");
-
             Console.WriteLine("\n");
             Console.Write("Insert key value : ");
 
@@ -74,7 +71,7 @@ namespace AssetData.UI
                     break;
 
                 default:
-                    new MainMenu().GoBackMainMenu("\nInvalid input value... Try Again!");
+                    new MainMenu().GoBackMainMenu("Invalid input value... Try Again!", "E");
                     break;
             }
         }
