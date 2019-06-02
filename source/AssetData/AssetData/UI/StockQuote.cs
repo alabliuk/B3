@@ -5,12 +5,10 @@ namespace AssetData.UI
 {
     class StockQuote
     {
-        public void Render(string outputMsg = null)
+        public void Render(string outputMsg = null, string status = null)
         {
             Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(outputMsg);
-            Console.ForegroundColor = ConsoleColor.White;
+            new LineColor().Render(outputMsg, status);
             Console.WriteLine("\n");
             Console.WriteLine("╔═══════════════════════════════════════════════╗");
             Console.WriteLine("║ 1 INTRADAY                                    ║");
@@ -39,7 +37,7 @@ namespace AssetData.UI
             {
                 case ConsoleKey.D1:
                 case ConsoleKey.NumPad1:
-                    new IntradayController().IntradayManager();
+                    IntradayScreen();
                     break;
 
                 case ConsoleKey.D8:
@@ -53,8 +51,122 @@ namespace AssetData.UI
                     break;
 
                 default:
-                    new StockQuote().Render("\n\tInvalid input value... Try Again!");
+                    new StockQuote().Render("Invalid input value... Try Again!", "E");
                     break;
+            }
+        }
+
+        private void IntradayScreen(string outputMsg = null, string status = null)
+        {
+            Console.Clear();
+            new LineColor().Render(outputMsg, status);
+            Console.WriteLine("\n");
+            Console.WriteLine("╔═══════════════════════════════════════════════╗");
+            Console.WriteLine("║ 1 RUN                                         ║");
+            Console.WriteLine("║                                               ║");
+            Console.WriteLine("║ 2 LIST OF PROCESSING ASSETS                   ║");
+            Console.WriteLine("║                                               ║");
+            Console.WriteLine("║ 3 GO BACK TO MENU                             ║");
+            Console.WriteLine("╚═══════════════════════════════════════════════╝");
+            Console.WriteLine("\n");
+            Console.Write("Insert key value : ");
+
+            ConsoleKey UserInput = Console.ReadKey(true).Key;
+            switch (UserInput)
+            {
+                case ConsoleKey.D1:
+                case ConsoleKey.NumPad1:
+                    new IntradayController().IntradayManager();
+                    break;
+
+                case ConsoleKey.D2:
+                case ConsoleKey.NumPad2:
+                    ListRegisteredAssets();
+                    break;
+
+                case ConsoleKey.D3:
+                case ConsoleKey.NumPad3:
+                    new Program().StartApp();
+                    break;
+
+                default:
+                    new StockQuote().IntradayScreen("Invalid input value... Try Again!", "E");
+                    break;
+            }
+        }
+
+        private void ListRegisteredAssets(string outputMsg = null, string status = null)
+        {
+            Console.Clear();
+            new LineColor().Render(outputMsg, status);
+            Console.WriteLine("\n");
+            Console.WriteLine("╔═══════════════════════════════════════════════╗");
+            Console.WriteLine("║                                               ║");
+            Console.WriteLine("\t1 CEMIG4");
+            Console.WriteLine("\t2 VALE3");
+            Console.WriteLine("\t3 PETR4");
+
+            Console.WriteLine("\n");
+            Console.WriteLine("║ 1 ADD                                         ║");
+            Console.WriteLine("║                                               ║");
+            Console.WriteLine("║ 2 REMOVE                                      ║");
+            Console.WriteLine("║                                               ║");
+            Console.WriteLine("║ 3 GO BACK TO MENU                             ║");
+            Console.WriteLine("╚═══════════════════════════════════════════════╝");
+            Console.WriteLine("\n");
+            Console.Write("Insert key value : ");
+
+            ConsoleKey UserInput = Console.ReadKey(true).Key;
+            switch (UserInput)
+            {
+                case ConsoleKey.D1:
+                case ConsoleKey.NumPad1:
+                    AddOrRemoveAsset("ADD");
+                    break;
+
+                case ConsoleKey.D2:
+                case ConsoleKey.NumPad2:
+                    AddOrRemoveAsset("REMOVE");
+                    break;
+
+                case ConsoleKey.D3:
+                case ConsoleKey.NumPad3:
+                    new Program().StartApp();
+                    break;
+
+                default:
+                    new StockQuote().IntradayScreen("Invalid input value... Try Again!", "E");
+                    break;
+            }
+        }
+
+        private void AddOrRemoveAsset(string operation)
+        {
+            Console.WriteLine("\n\n");
+            Console.Write($"{operation} Asset Code : ");
+            string inputAssetCode = Console.ReadLine();
+
+            //Verifica se há o ativo cadastrado na tabela Asset
+            bool isValid = new IntradayController().IsValidAssetCode(inputAssetCode);
+
+            if (isValid)
+            {
+                switch (operation)
+                {
+                    case "ADD":
+                        new IntradayController().AddAssetOnProcessingList();
+                        ListRegisteredAssets($"Ativo {inputAssetCode} cadastrado com sucesso!", "S");
+                        break;
+
+                    case "REMOVE":
+                        new IntradayController().RemoveAssetOnProcessingList();
+                        break;
+                }
+            }
+            else
+            {
+                string outputMsg = $"Asset Code {inputAssetCode} Invalid!";
+                ListRegisteredAssets(outputMsg, "E");
             }
         }
     }

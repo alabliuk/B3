@@ -4,7 +4,7 @@ namespace AssetData.Model
 {
     public class IntradayItem
     {
-        public string date { get; set; }
+        public long date { get; set; }
         public double price { get; set; }
         public double low { get; set; }
         public double high { get; set; }

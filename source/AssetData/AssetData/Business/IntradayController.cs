@@ -1,7 +1,9 @@
 ﻿using AssetData.Model;
+using AssetData.Repository;
 using AssetData.Service;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace AssetData.Business
 {
@@ -10,19 +12,34 @@ namespace AssetData.Business
         public void IntradayManager()
         {
             Console.WriteLine("\n\nCarregando Intraday...");
-            Intraday intraday = new IntradayController().GetAllIntraday();
 
-            //var date = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(intraday.today));
+            //string idtAsset = "484"; //--> For debug PETR4
 
-            var time = TimeSpan.FromMilliseconds(intraday.today);
-            DateTime startdate = new DateTime(1970, 1, 1) + time;
+            List<int> listAssets = new IntradayRepository().IntradayGetAssetsToProcess();
+            foreach(int idtAsset in listAssets)
+            {
+                Intraday intraday = new IntradayController().GetAllIntraday(idtAsset);
 
+                Console.WriteLine(idtAsset);
+
+                if (intraday.data != null)
+                {
+                    for (int x = 0; x < intraday.data.Count; x++)
+                    {
+                        Console.WriteLine(idtAsset + " - " + intraday.data[x].price);
+
+                        bool dataVerification = new IntradayRepository().IntradayVerification(intraday.data[x].date, idtAsset);
+                        if (!dataVerification)
+                            new IntradayRepository().IntradaySave(idtAsset, intraday.data[x]);
+                    }
+                }
+            }            
         }
 
-        public Intraday GetAllIntraday()
+        public Intraday GetAllIntraday(int idtAsset)
         {
             Intraday intraday = new Intraday();
-            string urlRequest = new Utils().UrlBuild("API_Access:UrlBase", "API_Access:IntradayService", "484");
+            string urlRequest = new Utils().UrlBuild("API_Access:UrlBase", "API_Access:IntradayService", idtAsset.ToString());
             string respApiJson = new ServiceRequester().GetRequest(urlRequest);
 
             respApiJson = respApiJson.Replace("uolfinancecallback0(", "").Replace(");", "");
@@ -33,6 +50,21 @@ namespace AssetData.Business
             }
 
             return intraday;
+        }
+
+        public void AddAssetOnProcessingList()
+        {
+
+        }
+
+        public void RemoveAssetOnProcessingList()
+        {
+
+        }
+
+        public bool IsValidAssetCode(string assetCode)
+        {
+            return new AssetRepository().AssetVerification(assetCode);
         }
     }
 }

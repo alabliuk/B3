@@ -12,7 +12,7 @@ namespace AssetData.Repository
         public bool AssetVerification(int idt)
         {
             var config = new Utils().ReadTokensAppsettings();
-            bool asset;
+            bool asset = false;
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
             string sql = "SELECT COUNT(1) FROM ASSETS WHERE idt = @idt";
@@ -30,10 +30,31 @@ namespace AssetData.Repository
             return asset;
         }
 
+        public bool AssetVerification(string codeAsset)
+        {
+            var config = new Utils().ReadTokensAppsettings();
+            bool asset = false;
+            string strConnectionString = config.GetSection("Conn:DB").Value;
+
+            string sql = "SELECT COUNT(1) FROM ASSETS WHERE asset = @asset";
+
+            using (IDbConnection conn = new SqlConnection(strConnectionString))
+            {
+                var vParams = new DynamicParameters();
+                vParams.Add("@asset", codeAsset);
+
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+
+                asset = conn.Query<bool>(sql, vParams).FirstOrDefault();
+            }
+            return asset;
+        }
+
         public bool AssetIsUpdated(AssetItem assets)
         {
             var config = new Utils().ReadTokensAppsettings();
-            bool asset;
+            bool asset = false;
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
             string sql = "SELECT COUNT(1) FROM ASSETS " +
@@ -69,9 +90,9 @@ namespace AssetData.Repository
                 var vParams = new DynamicParameters();
                 vParams.Add("@idt", assets.idt);
                 vParams.Add("@code", assets.code.TrimEnd());
-                vParams.Add("@asset", assets.code.Replace(".SA", "").TrimEnd());
-                vParams.Add("@companyName", assets.companyName.TrimEnd());
-                vParams.Add("@companyAbvName", assets.companyAbvName.TrimEnd());
+                vParams.Add("@asset", assets.code.Replace(".SA", "").TrimEnd().ToUpper());
+                vParams.Add("@companyName", assets.companyName.TrimEnd().ToUpper());
+                vParams.Add("@companyAbvName", assets.companyAbvName.TrimEnd().ToUpper());
 
                 if (conn.State == ConnectionState.Closed)
                     conn.Open();
