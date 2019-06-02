@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.IO;
 
 namespace AssetData.Service
@@ -26,6 +27,13 @@ namespace AssetData.Service
             }
 
             return _urlBase + _assetIdt + _urlFinal;
+        }
+
+        public DateTime MillisToDatetimeNow(long millis)
+        {
+            var time = TimeSpan.FromMilliseconds(millis);
+            DateTime datetimeConvert = new DateTime(1970, 1, 1) + time;
+            return datetimeConvert = datetimeConvert - (DateTime.UtcNow - DateTime.Now);
         }
     }
 }
