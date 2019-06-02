@@ -10,8 +10,7 @@ namespace AssetData.UI
             Console.ForegroundColor = ConsoleColor.Red;
 
             Console.Write("▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ Asset Service v0.1 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒");
-
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ResetColor();
             Console.WriteLine("\n\n\n");
             Console.WriteLine("╔═══════════════════════════════════════════════╗");
             Console.WriteLine("║ 1 LOAD ASSETS                                 ║");
@@ -46,7 +45,7 @@ namespace AssetData.UI
 
         public void GoBackMainMenu(string outputMsg = null, string status = null)
         {
-            new LineColor().Render(outputMsg, status);
+            new LineColorAlert().Render(outputMsg, status);
             Console.WriteLine("\n");
             Console.WriteLine("╔═══════════════════════════════════════════════╗");
             Console.WriteLine("║ 1 GO BACK TO MENU                             ║");

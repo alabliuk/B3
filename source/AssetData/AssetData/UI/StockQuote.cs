@@ -8,7 +8,7 @@ namespace AssetData.UI
         public void Render(string outputMsg = null, string status = null)
         {
             Console.Clear();
-            new LineColor().Render(outputMsg, status);
+            new LineColorAlert().Render(outputMsg, status);
             Console.WriteLine("\n");
             Console.WriteLine("╔═══════════════════════════════════════════════╗");
             Console.WriteLine("║ 1 INTRADAY                                    ║");
@@ -59,7 +59,7 @@ namespace AssetData.UI
         private void IntradayScreen(string outputMsg = null, string status = null)
         {
             Console.Clear();
-            new LineColor().Render(outputMsg, status);
+            new LineColorAlert().Render(outputMsg, status);
             Console.WriteLine("\n");
             Console.WriteLine("╔═══════════════════════════════════════════════╗");
             Console.WriteLine("║ 1 RUN                                         ║");
@@ -98,7 +98,7 @@ namespace AssetData.UI
         private void ListRegisteredAssets(string outputMsg = null, string status = null)
         {
             Console.Clear();
-            new LineColor().Render(outputMsg, status);
+            new LineColorAlert().Render(outputMsg, status);
             Console.WriteLine("\n");
             Console.WriteLine("╔═══════════════════════════════════════════════╗");
             Console.WriteLine("║                                               ║");
@@ -111,7 +111,7 @@ namespace AssetData.UI
             Console.WriteLine("║                                               ║");
             Console.WriteLine("║ 2 REMOVE                                      ║");
             Console.WriteLine("║                                               ║");
-            Console.WriteLine("║ 3 GO BACK TO MENU                             ║");
+            Console.WriteLine("║ 3 GO BACK                                     ║");
             Console.WriteLine("╚═══════════════════════════════════════════════╝");
             Console.WriteLine("\n");
             Console.Write("Insert key value : ");
@@ -131,7 +131,7 @@ namespace AssetData.UI
 
                 case ConsoleKey.D3:
                 case ConsoleKey.NumPad3:
-                    new Program().StartApp();
+                    IntradayScreen();
                     break;
 
                 default:
@@ -151,6 +151,7 @@ namespace AssetData.UI
 
             if (isValid)
             {
+                inputAssetCode = inputAssetCode.ToUpper();
                 switch (operation)
                 {
                     case "ADD":

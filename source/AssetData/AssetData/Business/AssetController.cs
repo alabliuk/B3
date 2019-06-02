@@ -3,6 +3,7 @@ using AssetData.Service;
 using Newtonsoft.Json;
 using System;
 using AssetData.Repository;
+using AssetData.UI;
 
 namespace AssetData.Business
 {
@@ -15,9 +16,8 @@ namespace AssetData.Business
             int error = 0;
             int discard = 0;
 
-            Console.WriteLine("\nCarregando lista de ativos...");
+            new LineColorLine().Bold("\nCarregando lista de ativos...\n");
             Asset assetsApi = GetAllAssets();
-
             for (int x = 0; x < assetsApi.data.Count; x++)
             {
                 bool isAvailable = new AssetRepository().AssetVerification(assetsApi.data[x].idt);
@@ -37,18 +37,21 @@ namespace AssetData.Business
                             //Atualiza as novas informações na tabela de ativo
                             new AssetRepository().AssetUpdate(assetsApi.data[x]);
 
-                            Console.WriteLine("Ativo atualizado com sucesso: " + assetsApi.data[x].code + " - " + assetsApi.data[x].companyName);
+                            new LineColorLine().Green("Ativo atualizado com sucesso: ");
+                            Console.WriteLine(assetsApi.data[x].code + " - " + assetsApi.data[x].companyName);
                             update++;
                         }
                         else
                         {
-                            Console.WriteLine("Ativo sem Alteração: " + assetsApi.data[x].code + " - " + assetsApi.data[x].companyName);
+                            new LineColorLine().Yellow("Ativo sem Alteração: ");
+                            Console.WriteLine(assetsApi.data[x].code + " - " + assetsApi.data[x].companyName);
                             discard++;
                         }
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine("ERRO: " + assetsApi.data[x].code + " - " + assetsApi.data[x].companyName + " --> " + e.Message);
+                        new LineColorLine().Red("ERRO: ");
+                        Console.WriteLine(assetsApi.data[x].code + " - " + assetsApi.data[x].companyName);
                         error++;
                     }
                 }
@@ -57,7 +60,8 @@ namespace AssetData.Business
                     try
                     {
                         new AssetRepository().AssetSave(assetsApi.data[x]);
-                        Console.WriteLine("Ativo cadastrado com sucesso: " + assetsApi.data[x].code + " - " + assetsApi.data[x].companyName);
+                        new LineColorLine().Green("Ativo cadastrado com sucesso: ");
+                        Console.WriteLine(assetsApi.data[x].code + " - " + assetsApi.data[x].companyName);
                         create++;
                     }
                     catch (Exception e)
@@ -74,7 +78,7 @@ namespace AssetData.Business
             Console.WriteLine("Ativos Sem Alteração: " + discard);
             Console.WriteLine("Ativos Com Erro: " + error);
 
-            new UI.MainMenu().GoBackMainMenu();
+            new MainMenu().GoBackMainMenu();
         }
 
         public Asset GetAllAssets()

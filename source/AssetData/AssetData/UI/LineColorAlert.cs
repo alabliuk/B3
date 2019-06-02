@@ -4,18 +4,18 @@ using System.Text;
 
 namespace AssetData.UI
 {
-    class LineColor
+    class LineColorAlert
     {
         public void Render(string outputMsg = null, string status = null)
         {
             switch (status)
             {
                 case "E":
-                    new LineColor().Red(outputMsg);
+                    new LineColorAlert().Red(outputMsg);
                     break;
 
                 case "S":
-                    new LineColor().Green(outputMsg);
+                    new LineColorAlert().Green(outputMsg);
                     break;
 
                 case null:
@@ -30,14 +30,14 @@ namespace AssetData.UI
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("\n\n\t" + outputMsg);
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ResetColor();
         }
 
         public void Green(string outputMsg)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("\n\n\t" + outputMsg);
-            Console.ForegroundColor = ConsoleColor.White;
+            Console.ResetColor();
         }
     }
 }
