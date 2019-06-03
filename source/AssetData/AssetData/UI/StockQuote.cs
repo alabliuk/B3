@@ -1,5 +1,7 @@
 ﻿using AssetData.Business;
+using AssetData.Repository;
 using System;
+using System.Collections.Generic;
 
 namespace AssetData.UI
 {
@@ -76,8 +78,12 @@ namespace AssetData.UI
             {
                 case ConsoleKey.D1:
                 case ConsoleKey.NumPad1:
-                    new IntradayController().IntradayManager();
-                    break;
+                    Console.ReadKey(false);
+                    RunningIntradayScreen();
+                    while (true)
+                    {
+                        new IntradayController().IntradayManager();
+                    }
 
                 case ConsoleKey.D2:
                 case ConsoleKey.NumPad2:
@@ -97,14 +103,10 @@ namespace AssetData.UI
 
         private void ListRegisteredAssets(string outputMsg = null, string status = null)
         {
-            Console.Clear();
-            new LineColorAlert().Render(outputMsg, status);
-            Console.WriteLine("\n");
-            Console.WriteLine("╔═══════════════════════════════════════════════╗");
-            Console.WriteLine("║                                               ║");
-            Console.WriteLine("\t1 CEMIG4");
-            Console.WriteLine("\t2 VALE3");
-            Console.WriteLine("\t3 PETR4");
+            if (outputMsg is null)
+                RenderAssetList();
+            else
+                RenderAssetList(outputMsg, status);
 
             Console.WriteLine("\n");
             Console.WriteLine("║ 1 ADD                                         ║");
@@ -140,6 +142,36 @@ namespace AssetData.UI
             }
         }
 
+        private void RenderAssetList(string outputMsg = null, string status = null)
+        {
+            Console.Clear();
+            new LineColorLine().Bold("\n\nLoading Assets...");
+            List<string> assetList = new IntradayRepository().IntradayAssetList();
+            Console.Clear();
+            new LineColorAlert().Render(outputMsg, status);
+            Console.WriteLine("\n");
+            Console.WriteLine("╔═══════════════════════════════════════════════╗");
+            Console.WriteLine("║                                               ║");
+
+            foreach (string asset in assetList)
+            {
+                new LineColorLine().White("\t" + asset + "\n");
+            }
+        }
+
+        public void RunningIntradayScreen(string outputMsg = null, string status = null, string asset = null)
+        {
+            RenderAssetList(outputMsg, status);
+
+            if (!string.IsNullOrEmpty(outputMsg))
+            {
+                Console.Write("\t");
+                new LineColorLine().Bold($"\n\t{asset}\t\n");
+            }
+
+            Console.WriteLine("╚═══════════════════════════════════════════════╝");
+        }
+
         private void AddOrRemoveAsset(string operation)
         {
             Console.WriteLine("\n\n");
@@ -155,12 +187,13 @@ namespace AssetData.UI
                 switch (operation)
                 {
                     case "ADD":
-                        new IntradayController().AddAssetOnProcessingList();
-                        ListRegisteredAssets($"Ativo {inputAssetCode} cadastrado com sucesso!", "S");
+                        var rA = new IntradayController().AddAssetOnProcessingList(inputAssetCode);
+                        ListRegisteredAssets(rA.Item1, rA.Item2);
                         break;
 
                     case "REMOVE":
-                        new IntradayController().RemoveAssetOnProcessingList();
+                        var rR = new IntradayController().RemoveAssetOnProcessingList(inputAssetCode);
+                        ListRegisteredAssets(rR.Item1, rR.Item2);
                         break;
                 }
             }
@@ -169,6 +202,12 @@ namespace AssetData.UI
                 string outputMsg = $"Asset Code {inputAssetCode} Invalid!";
                 ListRegisteredAssets(outputMsg, "E");
             }
+        }
+
+        private void RunIntraday()
+        {
+            Console.Clear();
+            new LineColorLine().Bold("\n\nLoading Assets...");
         }
     }
 }

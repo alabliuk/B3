@@ -25,6 +25,13 @@ namespace AssetData.UI
             Console.ResetColor();
         }
 
+        public void White(string outputMsg)
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(outputMsg);
+            Console.ResetColor();
+        }
+
         public void Bold(string outputMsg)
         {
             Console.ForegroundColor = ConsoleColor.Black;

@@ -1,9 +1,11 @@
 ﻿using AssetData.Model;
 using AssetData.Repository;
 using AssetData.Service;
+using AssetData.UI;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace AssetData.Business
 {
@@ -11,29 +13,28 @@ namespace AssetData.Business
     {
         public void IntradayManager()
         {
-            Console.WriteLine("\n\nCarregando Intraday...");
+            string outputMsg = "Running Intraday Service...";
+            string status = "R";
+            string asset = string.Empty;
 
-            //string idtAsset = "484"; //--> For debug PETR4
+            List<AssetItem> listAssets = new IntradayRepository().IntradayGetAssetsToProcess();
 
-            List<int> listAssets = new IntradayRepository().IntradayGetAssetsToProcess();
-            foreach(int idtAsset in listAssets)
+            for (int y = 0; y < listAssets.Count; y++)
             {
-                Intraday intraday = new IntradayController().GetAllIntraday(idtAsset);
-
-                Console.WriteLine(idtAsset);
+                //RequestApi
+                Intraday intraday = new IntradayController().GetAllIntraday(listAssets[y].idt);
 
                 if (intraday.data != null)
                 {
                     for (int x = 0; x < intraday.data.Count; x++)
                     {
-                        Console.WriteLine(idtAsset + " - " + intraday.data[x].price);
-
-                        bool dataVerification = new IntradayRepository().IntradayVerification(intraday.data[x].date, idtAsset);
+                        bool dataVerification = new IntradayRepository().IntradayVerification(intraday.data[x].date, listAssets[y].idt);
                         if (!dataVerification)
-                            new IntradayRepository().IntradaySave(idtAsset, intraday.data[x]);
+                            new IntradayRepository().IntradaySave(listAssets[y].idt, intraday.data[x]);
                     }
                 }
-            }            
+                new StockQuote().RunningIntradayScreen(outputMsg, status, $"PROCESS: {listAssets[y].asset}");
+            }
         }
 
         public Intraday GetAllIntraday(int idtAsset)
@@ -52,14 +53,52 @@ namespace AssetData.Business
             return intraday;
         }
 
-        public void AddAssetOnProcessingList()
+        public Tuple<string, string> AddAssetOnProcessingList(string inputAssetCode)
         {
+            string outputMsg = string.Empty;
+            string status = string.Empty;
 
+            //Verifica se o ativo já esta cadastrado
+            bool vefAsset = new IntradayRepository().IntradayAssetVerification(inputAssetCode);
+
+            if (!vefAsset)
+            {
+                new IntradayRepository().IntradayAssetSave(inputAssetCode);
+                outputMsg = $"Ativo {inputAssetCode} cadastrado com sucesso!";
+                status = "S";
+
+            }
+            else
+            {
+                outputMsg = $"Ativo {inputAssetCode} já cadastrado.";
+                status = "W";
+            }
+
+            return Tuple.Create(outputMsg, status);
         }
 
-        public void RemoveAssetOnProcessingList()
+        public Tuple<string, string> RemoveAssetOnProcessingList(string inputAssetCode)
         {
+            string outputMsg = string.Empty;
+            string status = string.Empty;
 
+            //Verifica se o ativo já esta cadastrado
+            bool vefAsset = new IntradayRepository().IntradayAssetVerification(inputAssetCode);
+
+            if (vefAsset)
+            {
+                new IntradayRepository().IntradayAssetDelete(inputAssetCode);
+                outputMsg = $"Ativo {inputAssetCode} removido com sucesso!";
+                status = "S";
+
+            }
+            else
+            {
+                outputMsg = $"Ativo {inputAssetCode} não encontrado";
+                status = "W";
+            }
+
+            return Tuple.Create(outputMsg, status);
         }
 
         public bool IsValidAssetCode(string assetCode)
