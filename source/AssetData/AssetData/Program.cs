@@ -1,6 +1,7 @@
 ﻿using AssetData.Business;
 using AssetData.UI;
 using System;
+using System.Threading;
 
 namespace AssetData
 {
@@ -30,7 +31,9 @@ namespace AssetData
                         new StockQuote().Render();
                         break;
 
-                    case 6:
+                    case 0:
+                        new LineColorLine().Red("\n\n\tShutting down...");
+                        Thread.Sleep(2000);
                         Environment.Exit(0);
                         break;
 

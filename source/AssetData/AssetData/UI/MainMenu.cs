@@ -17,13 +17,7 @@ namespace AssetData.UI
             Console.WriteLine("║                                               ║");
             Console.WriteLine("║ 2 LOAD STOCK QUOTES                           ║");
             Console.WriteLine("║                                               ║");
-            Console.WriteLine("║ 3 XXXXXXXXXXXXXXXX                            ║");
-            Console.WriteLine("║                                               ║");
-            Console.WriteLine("║ 4 YYYYYYYYYY                                  ║");
-            Console.WriteLine("║                                               ║");
-            Console.WriteLine("║ 5 ZZZZZZZZZZZZZZ                              ║");
-            Console.WriteLine("║                                               ║");
-            Console.WriteLine("║ 6 EXIT                                        ║");
+            Console.WriteLine("║ 0 EXIT                                        ║");
             Console.WriteLine("╚═══════════════════════════════════════════════╝");
             Console.WriteLine("\n");
             Console.Write("Insert key value : ");
@@ -50,7 +44,7 @@ namespace AssetData.UI
             Console.WriteLine("╔═══════════════════════════════════════════════╗");
             Console.WriteLine("║ 1 GO BACK TO MENU                             ║");
             Console.WriteLine("║                                               ║");
-            Console.WriteLine("║ 2 EXIT                                        ║");
+            Console.WriteLine("║ 0 EXIT                                        ║");
             Console.WriteLine("╚═══════════════════════════════════════════════╝");
             Console.WriteLine("\n");
             Console.Write("Insert key value : ");
@@ -64,8 +58,8 @@ namespace AssetData.UI
                     new Program().StartApp();
                     break;
 
-                case ConsoleKey.D2:
-                case ConsoleKey.NumPad2:
+                case ConsoleKey.D0:
+                case ConsoleKey.NumPad0:
                     Environment.Exit(0);
                     break;
 

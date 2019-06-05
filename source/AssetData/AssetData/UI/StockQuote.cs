@@ -27,9 +27,9 @@ namespace AssetData.UI
             Console.WriteLine("║                                               ║");
             Console.WriteLine("║ 7 INTERDAY (ALL)                              ║");
             Console.WriteLine("║                                               ║");
-            Console.WriteLine("║ 8 GO BACK TO MENU                             ║");
+            Console.WriteLine("║ 9 GO BACK TO MENU                             ║");
             Console.WriteLine("║                                               ║");
-            Console.WriteLine("║ 9 EXIT                                        ║");
+            Console.WriteLine("║ 0 EXIT                                        ║");
             Console.WriteLine("╚═══════════════════════════════════════════════╝");
             Console.WriteLine("\n");
             Console.Write("Insert key value : ");
@@ -42,13 +42,13 @@ namespace AssetData.UI
                     IntradayScreen();
                     break;
 
-                case ConsoleKey.D8:
-                case ConsoleKey.NumPad8:
+                case ConsoleKey.D9:
+                case ConsoleKey.NumPad9:
                     new Program().StartApp();
                     break;
 
-                case ConsoleKey.D9:
-                case ConsoleKey.NumPad9:
+                case ConsoleKey.D0:
+                case ConsoleKey.NumPad0:
                     Environment.Exit(0);
                     break;
 
@@ -68,7 +68,7 @@ namespace AssetData.UI
             Console.WriteLine("║                                               ║");
             Console.WriteLine("║ 2 LIST OF PROCESSING ASSETS                   ║");
             Console.WriteLine("║                                               ║");
-            Console.WriteLine("║ 3 GO BACK TO MENU                             ║");
+            Console.WriteLine("║ 9 GO BACK TO MENU                             ║");
             Console.WriteLine("╚═══════════════════════════════════════════════╝");
             Console.WriteLine("\n");
             Console.Write("Insert key value : ");
@@ -78,7 +78,6 @@ namespace AssetData.UI
             {
                 case ConsoleKey.D1:
                 case ConsoleKey.NumPad1:
-                    Console.ReadKey(false);
                     RunningIntradayScreen();
                     while (true)
                     {
@@ -90,8 +89,8 @@ namespace AssetData.UI
                     ListRegisteredAssets();
                     break;
 
-                case ConsoleKey.D3:
-                case ConsoleKey.NumPad3:
+                case ConsoleKey.D9:
+                case ConsoleKey.NumPad9:
                     new Program().StartApp();
                     break;
 
@@ -113,7 +112,7 @@ namespace AssetData.UI
             Console.WriteLine("║                                               ║");
             Console.WriteLine("║ 2 REMOVE                                      ║");
             Console.WriteLine("║                                               ║");
-            Console.WriteLine("║ 3 GO BACK                                     ║");
+            Console.WriteLine("║ 9 GO BACK                                     ║");
             Console.WriteLine("╚═══════════════════════════════════════════════╝");
             Console.WriteLine("\n");
             Console.Write("Insert key value : ");
@@ -131,13 +130,13 @@ namespace AssetData.UI
                     AddOrRemoveAsset("REMOVE");
                     break;
 
-                case ConsoleKey.D3:
-                case ConsoleKey.NumPad3:
+                case ConsoleKey.D9:
+                case ConsoleKey.NumPad9:
                     IntradayScreen();
                     break;
 
                 default:
-                    new StockQuote().IntradayScreen("Invalid input value... Try Again!", "E");
+                    new StockQuote().ListRegisteredAssets("Invalid input value... Try Again!", "E");
                     break;
             }
         }
