@@ -9,13 +9,15 @@ namespace AssetData.UI
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Red;
 
-            Console.Write("▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ Asset Service v0.1 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒");
+            Console.Write("▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ Asset Service v0.2 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒");
             Console.ResetColor();
             Console.WriteLine("\n\n\n");
             Console.WriteLine("╔═══════════════════════════════════════════════╗");
             Console.WriteLine("║ 1 LOAD ASSETS                                 ║");
             Console.WriteLine("║                                               ║");
             Console.WriteLine("║ 2 LOAD STOCK QUOTES                           ║");
+            Console.WriteLine("║                                               ║");
+            Console.WriteLine("║ 3 EXCHANGE RATES                              ║");
             Console.WriteLine("║                                               ║");
             Console.WriteLine("║ 0 EXIT                                        ║");
             Console.WriteLine("╚═══════════════════════════════════════════════╝");

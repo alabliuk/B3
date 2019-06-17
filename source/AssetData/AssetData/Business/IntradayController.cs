@@ -35,6 +35,9 @@ namespace AssetData.Business
                 }
                 new StockQuote().RunningIntradayScreen(outputMsg, status, $"PROCESS: {listAssets[y].asset}");
             }
+
+            new StockQuote().RunningIntradayScreen("Waiting...", "W", $"Next Process: {DateTime.Now.AddMinutes(5)}");
+            Thread.Sleep(60000);
         }
 
         public Intraday GetAllIntraday(int idtAsset)

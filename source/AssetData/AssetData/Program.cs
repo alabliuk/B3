@@ -31,6 +31,10 @@ namespace AssetData
                         new StockQuote().Render();
                         break;
 
+                    case 3:
+                        new Exchange().Render();
+                        break;
+
                     case 0:
                         new LineColorLine().Red("\n\n\tShutting down...");
                         Thread.Sleep(2000);
