@@ -298,25 +298,25 @@ namespace AssetData.UI
                 case ConsoleKey.D1:
                 case ConsoleKey.NumPad1:
                     begintDate = begintDate.AddDays(-5);
-                    new InterdayController().InterdayManager(loadListAsset, begintDate, endDate);
+                    new InterdayController().InterdayManager(begintDate, endDate, loadListAsset);
                     break;
 
                 case ConsoleKey.D2:
                 case ConsoleKey.NumPad2:
                     begintDate = begintDate.AddDays(-30);
-                    new InterdayController().InterdayManager(loadListAsset, begintDate, endDate);
+                    new InterdayController().InterdayManager(begintDate, endDate, loadListAsset);
                     break;
 
                 case ConsoleKey.D3:
                 case ConsoleKey.NumPad3:
                     begintDate = begintDate.AddDays(-365);
-                    new InterdayController().InterdayManager(loadListAsset, begintDate, endDate);
+                    new InterdayController().InterdayManager(begintDate, endDate, loadListAsset);
                     break;
 
                 case ConsoleKey.D4:
                 case ConsoleKey.NumPad4:
                     begintDate = begintDate.AddDays(-1825);
-                    new InterdayController().InterdayManager(loadListAsset, begintDate, endDate);
+                    new InterdayController().InterdayManager(begintDate, endDate, loadListAsset);
                     break;
 
                 case ConsoleKey.D5:

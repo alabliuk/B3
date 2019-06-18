@@ -35,5 +35,10 @@ namespace AssetData.Service
             DateTime datetimeConvert = new DateTime(1970, 1, 1) + time;
             return datetimeConvert = datetimeConvert - (DateTime.UtcNow - DateTime.Now);
         }
+
+        public double DatetimeToMillis(DateTime datetime)
+        {
+            return datetime.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+        }
     }
 }

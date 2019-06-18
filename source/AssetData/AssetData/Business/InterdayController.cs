@@ -10,9 +10,9 @@ namespace AssetData.Business
 {
     class InterdayController
     {
-        public void InterdayManager(bool loadListAsset = default(bool), DateTime? begintDate = null, DateTime? endDate = null)
+        public void InterdayManager(DateTime begintDate, DateTime endDate, bool loadListAsset = default(bool))
         {
-            new StockQuote().RunInterday($"Start Date: {String.Format("{0:d}", begintDate)} ~ End Data: {String.Format("{0:d}", endDate)}\n\n");
+            new StockQuote().RunInterday($"Start Date: {string.Format("{0:d}", begintDate)} ~ End Data: {string.Format("{0:d}", endDate)}\n\n");
 
             List<AssetItem> listAssets;
 
@@ -28,7 +28,7 @@ namespace AssetData.Business
             for (int y = 0; y < listAssets.Count; y++)
             {
                 //RequestApi
-                Interday interday = new InterdayController().GetInterday(listAssets[y].idt);
+                Interday interday = new InterdayController().GetInterday(listAssets[y].idt, begintDate, endDate);
 
                 if (interday.data != null)
                 {
@@ -46,11 +46,16 @@ namespace AssetData.Business
 
         }
 
-        public Interday GetInterday(int idtAsset)
+        public Interday GetInterday(int idtAsset, DateTime begintDate, DateTime endDate)
         {
+            double beginDateUnix = new Utils().DatetimeToMillis(begintDate);
+            double dtendDateUnix = new Utils().DatetimeToMillis(endDate);
+
+            string InterdayParameter = $"begin={beginDateUnix}&end={dtendDateUnix}";
+
             Interday interday = new Interday();
             string urlRequest = new Utils().UrlBuild("API_Access:UrlBase", "API_Access:InterdayService", idtAsset.ToString());
-            string respApiJson = new ServiceRequester().GetRequest(urlRequest);
+            string respApiJson = new ServiceRequester().GetRequest(urlRequest + InterdayParameter);
 
             if (!string.IsNullOrEmpty(respApiJson))
             {
