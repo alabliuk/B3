@@ -58,43 +58,7 @@ namespace AssetData.Repository
                 dataVerification = conn.Query<bool>(sql, vParams).FirstOrDefault();
             }
             return dataVerification;
-        }
-
-        public List<AssetItem> IntradayGetAssetsToProcess()
-        {
-            List<AssetItem> asset;
-            var config = new Utils().ReadTokensAppsettings();
-            string strConnectionString = config.GetSection("Conn:DB").Value;
-
-            string sql = "SELECT A.idt, A.asset FROM Assets A INNER JOIN IntradayAsset I ON A.asset = I.assetCode";
-
-            using (IDbConnection conn = new SqlConnection(strConnectionString))
-            {
-                if (conn.State == ConnectionState.Closed)
-                    conn.Open();
-
-                asset = conn.Query<AssetItem>(sql).ToList();
-            }
-            return asset;
-        }
-
-        public List<string> IntradayAssetList()
-        {
-            List<string> asset;
-            var config = new Utils().ReadTokensAppsettings();
-            string strConnectionString = config.GetSection("Conn:DB").Value;
-
-            string sql = "SELECT A.asset + ' - ' + A.companyAbvName as assetName FROM Assets A INNER JOIN IntradayAsset I ON A.asset = I.assetCode";
-
-            using (IDbConnection conn = new SqlConnection(strConnectionString))
-            {
-                if (conn.State == ConnectionState.Closed)
-                    conn.Open();
-
-                asset = conn.Query<string>(sql).ToList();
-            }
-            return asset;
-        }
+        }      
 
         public bool IsValidAssetCode(long unixTime, int idtAsset)
         {
@@ -109,68 +73,6 @@ namespace AssetData.Repository
                 var vParams = new DynamicParameters();
                 vParams.Add("@unixTime", unixTime);
                 vParams.Add("@idtAsset", idtAsset);
-
-                if (conn.State == ConnectionState.Closed)
-                    conn.Open();
-
-                dataVerification = conn.Query<bool>(sql, vParams).FirstOrDefault();
-            }
-            return dataVerification;
-        }
-
-        public bool IntradayAssetVerification(string assetCode)
-        {
-            var config = new Utils().ReadTokensAppsettings();
-            bool asset = false;
-            string strConnectionString = config.GetSection("Conn:DB").Value;
-
-            string sql = "SELECT COUNT(1) FROM IntradayAsset WHERE assetCode = @assetCode";
-
-            using (IDbConnection conn = new SqlConnection(strConnectionString))
-            {
-                var vParams = new DynamicParameters();
-                vParams.Add("@assetCode", assetCode);
-
-                if (conn.State == ConnectionState.Closed)
-                    conn.Open();
-
-                asset = conn.Query<bool>(sql, vParams).FirstOrDefault();
-            }
-            return asset;
-        }
-
-        public void IntradayAssetSave(string assetCode)
-        {
-            var config = new Utils().ReadTokensAppsettings();
-            string strConnectionString = config.GetSection("Conn:DB").Value;
-
-            string sql = "INSERT INTO IntradayAsset (assetCode, createDate) " +
-                "VALUES (@assetCode, GETDATE())";
-
-            using (IDbConnection conn = new SqlConnection(strConnectionString))
-            {
-                var vParams = new DynamicParameters();
-                vParams.Add("@assetCode", assetCode);
-
-                if (conn.State == ConnectionState.Closed)
-                    conn.Open();
-
-                conn.Query<int>(sql, vParams).FirstOrDefault();
-            }
-        }
-
-        public bool IntradayAssetDelete(string assetCode)
-        {
-            var config = new Utils().ReadTokensAppsettings();
-            bool dataVerification;
-            string strConnectionString = config.GetSection("Conn:DB").Value;
-
-            string sql = "DELETE FROM IntradayAsset WHERE AssetCode =  @assetCode";
-
-            using (IDbConnection conn = new SqlConnection(strConnectionString))
-            {
-                var vParams = new DynamicParameters();
-                vParams.Add("@assetCode", assetCode);
 
                 if (conn.State == ConnectionState.Closed)
                     conn.Open();

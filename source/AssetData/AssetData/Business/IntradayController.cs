@@ -17,7 +17,7 @@ namespace AssetData.Business
             string status = "R";
             string asset = string.Empty;
 
-            List<AssetItem> listAssets = new IntradayRepository().IntradayGetAssetsToProcess();
+            List<AssetItem> listAssets = new ProcessingAssetRepository().ProcessingAssetList();
 
             for (int y = 0; y < listAssets.Count; y++)
             {
@@ -54,59 +54,6 @@ namespace AssetData.Business
             }
 
             return intraday;
-        }
-
-        public Tuple<string, string> AddAssetOnProcessingList(string inputAssetCode)
-        {
-            string outputMsg = string.Empty;
-            string status = string.Empty;
-
-            //Verifica se o ativo já esta cadastrado
-            bool vefAsset = new IntradayRepository().IntradayAssetVerification(inputAssetCode);
-
-            if (!vefAsset)
-            {
-                new IntradayRepository().IntradayAssetSave(inputAssetCode);
-                outputMsg = $"Ativo {inputAssetCode} cadastrado com sucesso!";
-                status = "S";
-
-            }
-            else
-            {
-                outputMsg = $"Ativo {inputAssetCode} já cadastrado.";
-                status = "W";
-            }
-
-            return Tuple.Create(outputMsg, status);
-        }
-
-        public Tuple<string, string> RemoveAssetOnProcessingList(string inputAssetCode)
-        {
-            string outputMsg = string.Empty;
-            string status = string.Empty;
-
-            //Verifica se o ativo já esta cadastrado
-            bool vefAsset = new IntradayRepository().IntradayAssetVerification(inputAssetCode);
-
-            if (vefAsset)
-            {
-                new IntradayRepository().IntradayAssetDelete(inputAssetCode);
-                outputMsg = $"Ativo {inputAssetCode} removido com sucesso!";
-                status = "S";
-
-            }
-            else
-            {
-                outputMsg = $"Ativo {inputAssetCode} não encontrado";
-                status = "W";
-            }
-
-            return Tuple.Create(outputMsg, status);
-        }
-
-        public bool IsValidAssetCode(string assetCode)
-        {
-            return new AssetRepository().AssetVerification(assetCode);
         }
     }
 }
