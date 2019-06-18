@@ -96,7 +96,7 @@ namespace AssetData.Repository
             var config = new Utils().ReadTokensAppsettings();
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
-            string sql = "SELECT A.idt, A.asset FROM Assets A INNER JOIN ProcessingAssets I ON A.asset = I.assetCode";
+            string sql = "SELECT A.idt, A.asset, A.companyAbvName FROM Assets A INNER JOIN ProcessingAssets I ON A.asset = I.assetCode";
 
             using (IDbConnection conn = new SqlConnection(strConnectionString))
             {

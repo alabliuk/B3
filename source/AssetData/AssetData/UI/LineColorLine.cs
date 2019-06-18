@@ -32,6 +32,13 @@ namespace AssetData.UI
             Console.ResetColor();
         }
 
+        public void Cyan(string outputMsg)
+        {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.Write(outputMsg);
+            Console.ResetColor();
+        }
+
         public void Bold(string outputMsg)
         {
             Console.ForegroundColor = ConsoleColor.Black;

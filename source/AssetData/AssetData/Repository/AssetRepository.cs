@@ -1,6 +1,7 @@
 ﻿using AssetData.Model;
 using AssetData.Service;
 using Dapper;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -170,6 +171,24 @@ namespace AssetData.Repository
 
                 conn.Query<AssetItem>(sql, vParams).FirstOrDefault();
             }
+        }
+
+        public List<AssetItem> GetAllAssets()
+        {
+            List<AssetItem> asset;
+            var config = new Utils().ReadTokensAppsettings();
+            string strConnectionString = config.GetSection("Conn:DB").Value;
+
+            string sql = "SELECT A.idt, A.asset, A.companyAbvName FROM Assets A";
+
+            using (IDbConnection conn = new SqlConnection(strConnectionString))
+            {
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+
+                asset = conn.Query<AssetItem>(sql).ToList();
+            }
+            return asset;
         }
     }
 }

@@ -22,7 +22,7 @@ namespace AssetData.Business
             for (int y = 0; y < listAssets.Count; y++)
             {
                 //RequestApi
-                Intraday intraday = new IntradayController().GetAllIntraday(listAssets[y].idt);
+                Intraday intraday = new IntradayController().GetIntraday(listAssets[y].idt);
 
                 if (intraday.data != null)
                 {
@@ -30,7 +30,7 @@ namespace AssetData.Business
                     {
                         bool dataVerification = new IntradayRepository().IntradayVerification(intraday.data[x].date, listAssets[y].idt);
                         if (!dataVerification)
-                            new IntradayRepository().IntradaySave(listAssets[y].idt, intraday.data[x]);
+                            new IntradayRepository().Save(listAssets[y].idt, intraday.data[x]);
                     }
                 }
                 new StockQuote().RunningIntradayScreen(outputMsg, status, $"PROCESS: {listAssets[y].asset}");
@@ -40,7 +40,7 @@ namespace AssetData.Business
             Thread.Sleep(60000);
         }
 
-        public Intraday GetAllIntraday(int idtAsset)
+        public Intraday GetIntraday(int idtAsset)
         {
             Intraday intraday = new Intraday();
             string urlRequest = new Utils().UrlBuild("API_Access:UrlBase", "API_Access:IntradayService", idtAsset.ToString());

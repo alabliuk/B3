@@ -7,6 +7,7 @@ namespace AssetData.UI
 {
     class StockQuote
     {
+        #region Share Screens
         public void Render(string outputMsg = null, string status = null)
         {
             Console.Clear();
@@ -15,17 +16,7 @@ namespace AssetData.UI
             Console.WriteLine("╔═══════════════════════════════════════════════╗");
             Console.WriteLine("║ 1 INTRADAY                                    ║");
             Console.WriteLine("║                                               ║");
-            Console.WriteLine("║ 2 INTERDAY (LAST 1 WEEK)                      ║");
-            Console.WriteLine("║                                               ║");
-            Console.WriteLine("║ 3 INTERDAY (LAST 30 DAYS)                     ║");
-            Console.WriteLine("║                                               ║");
-            Console.WriteLine("║ 4 INTERDAY (LAST 1 YEAR)                      ║");
-            Console.WriteLine("║                                               ║");
-            Console.WriteLine("║ 5 INTERDAY (LAST 5 YEARS)                     ║");
-            Console.WriteLine("║                                               ║");
-            Console.WriteLine("║ 6 INTERDAY (LAST 10 YEARS)                    ║");
-            Console.WriteLine("║                                               ║");
-            Console.WriteLine("║ 7 INTERDAY (ALL)                              ║");
+            Console.WriteLine("║ 2 INTERDAY                                    ║");
             Console.WriteLine("║                                               ║");
             Console.WriteLine("║ 9 GO BACK TO MENU                             ║");
             Console.WriteLine("║                                               ║");
@@ -42,6 +33,11 @@ namespace AssetData.UI
                     IntradayScreen();
                     break;
 
+                case ConsoleKey.D2:
+                case ConsoleKey.NumPad2:
+                    InterdayScreen();
+                    break;
+
                 case ConsoleKey.D9:
                 case ConsoleKey.NumPad9:
                     new Program().StartApp();
@@ -56,6 +52,88 @@ namespace AssetData.UI
                     new StockQuote().Render("Invalid input value... Try Again!", "E");
                     break;
             }
+        }
+
+        
+        private void ListRegisteredAssets(string outputMsg = null, string status = null)
+        {
+            if (outputMsg is null)
+                RenderAssetList();
+            else
+                RenderAssetList(outputMsg, status);
+
+            Console.WriteLine("\n");
+            Console.WriteLine("║ 1 ADD                                         ║");
+            Console.WriteLine("║                                               ║");
+            Console.WriteLine("║ 2 REMOVE                                      ║");
+            Console.WriteLine("║                                               ║");
+            Console.WriteLine("║ 9 GO BACK                                     ║");
+            Console.WriteLine("╚═══════════════════════════════════════════════╝");
+            Console.WriteLine("\n");
+            Console.Write("Insert key value : ");
+
+            ConsoleKey UserInput = Console.ReadKey(true).Key;
+            switch (UserInput)
+            {
+                case ConsoleKey.D1:
+                case ConsoleKey.NumPad1:
+                    AddOrRemoveAsset("ADD");
+                    break;
+
+                case ConsoleKey.D2:
+                case ConsoleKey.NumPad2:
+                    AddOrRemoveAsset("REMOVE");
+                    break;
+
+                case ConsoleKey.D9:
+                case ConsoleKey.NumPad9:
+                    Render();
+                    break;
+
+                default:
+                    new StockQuote().ListRegisteredAssets("Invalid input value... Try Again!", "E");
+                    break;
+            }
+        }
+
+        private void AddOrRemoveAsset(string operation)
+        {
+            Console.WriteLine("\n\n");
+            Console.Write($"{operation} Asset Code : ");
+            string inputAssetCode = Console.ReadLine();
+
+            //Verifica se há o ativo cadastrado na tabela Asset
+            bool isValid = new ProcessingAssetController().IsValidAssetCode(inputAssetCode);
+
+            if (isValid)
+            {
+                inputAssetCode = inputAssetCode.ToUpper();
+                switch (operation)
+                {
+                    case "ADD":
+                        var rA = new ProcessingAssetController().AddAssetOnProcessingList(inputAssetCode);
+                        ListRegisteredAssets(rA.Item1, rA.Item2);
+                        break;
+
+                    case "REMOVE":
+                        var rR = new ProcessingAssetController().RemoveAssetOnProcessingList(inputAssetCode);
+                        ListRegisteredAssets(rR.Item1, rR.Item2);
+                        break;
+                }
+            }
+            else
+            {
+                string outputMsg = $"Asset Code {inputAssetCode} Invalid!";
+                ListRegisteredAssets(outputMsg, "E");
+            }
+        }
+        #endregion
+
+        #region Intraday
+        private void RunIntraday()
+        {
+            Console.Clear();
+            new LineColorLine().Bold("\n\nLoading Assets...");
         }
 
         private void IntradayScreen(string outputMsg = null, string status = null)
@@ -100,52 +178,11 @@ namespace AssetData.UI
             }
         }
 
-        private void ListRegisteredAssets(string outputMsg = null, string status = null)
-        {
-            if (outputMsg is null)
-                RenderAssetList();
-            else
-                RenderAssetList(outputMsg, status);
-
-            Console.WriteLine("\n");
-            Console.WriteLine("║ 1 ADD                                         ║");
-            Console.WriteLine("║                                               ║");
-            Console.WriteLine("║ 2 REMOVE                                      ║");
-            Console.WriteLine("║                                               ║");
-            Console.WriteLine("║ 9 GO BACK                                     ║");
-            Console.WriteLine("╚═══════════════════════════════════════════════╝");
-            Console.WriteLine("\n");
-            Console.Write("Insert key value : ");
-
-            ConsoleKey UserInput = Console.ReadKey(true).Key;
-            switch (UserInput)
-            {
-                case ConsoleKey.D1:
-                case ConsoleKey.NumPad1:
-                    AddOrRemoveAsset("ADD");
-                    break;
-
-                case ConsoleKey.D2:
-                case ConsoleKey.NumPad2:
-                    AddOrRemoveAsset("REMOVE");
-                    break;
-
-                case ConsoleKey.D9:
-                case ConsoleKey.NumPad9:
-                    IntradayScreen();
-                    break;
-
-                default:
-                    new StockQuote().ListRegisteredAssets("Invalid input value... Try Again!", "E");
-                    break;
-            }
-        }
-
         private void RenderAssetList(string outputMsg = null, string status = null)
         {
             Console.Clear();
             new LineColorLine().Bold("\n\nLoading Assets...");
-            List<string> assetList = new IntradayRepository().IntradayAssetList();
+            List<string> assetList = new ProcessingAssetRepository().AssetList();
             Console.Clear();
             new LineColorAlert().Render(outputMsg, status);
             Console.WriteLine("\n");
@@ -170,43 +207,146 @@ namespace AssetData.UI
 
             Console.WriteLine("╚═══════════════════════════════════════════════╝");
         }
+        #endregion
 
-        private void AddOrRemoveAsset(string operation)
-        {
-            Console.WriteLine("\n\n");
-            Console.Write($"{operation} Asset Code : ");
-            string inputAssetCode = Console.ReadLine();
-
-            //Verifica se há o ativo cadastrado na tabela Asset
-            bool isValid = new IntradayController().IsValidAssetCode(inputAssetCode);
-
-            if (isValid)
-            {
-                inputAssetCode = inputAssetCode.ToUpper();
-                switch (operation)
-                {
-                    case "ADD":
-                        var rA = new IntradayController().AddAssetOnProcessingList(inputAssetCode);
-                        ListRegisteredAssets(rA.Item1, rA.Item2);
-                        break;
-
-                    case "REMOVE":
-                        var rR = new IntradayController().RemoveAssetOnProcessingList(inputAssetCode);
-                        ListRegisteredAssets(rR.Item1, rR.Item2);
-                        break;
-                }
-            }
-            else
-            {
-                string outputMsg = $"Asset Code {inputAssetCode} Invalid!";
-                ListRegisteredAssets(outputMsg, "E");
-            }
-        }
-
-        private void RunIntraday()
+        #region Interday
+        public void RunInterday(string dateRange)
         {
             Console.Clear();
-            new LineColorLine().Bold("\n\nLoading Assets...");
+            new LineColorLine().Bold("\n\nLoading Interday...\n");
+            new LineColorLine().Cyan(dateRange);
         }
+
+        private void InterdayScreen(string outputMsg = null, string status = null)
+        {
+            Console.Clear();
+            new LineColorAlert().Render(outputMsg, status);
+            Console.WriteLine("\n");
+            Console.WriteLine("╔═══════════════════════════════════════════════╗");
+            Console.WriteLine("║ 1 RUN (List)                                  ║");
+            Console.WriteLine("║                                               ║");
+            Console.Write("║ 2 RUN (All)  "); new LineColorLine().Red("[!] Slow Function Execution [!]");
+            Console.WriteLine("  ║");
+            Console.WriteLine("║                                               ║");
+            Console.WriteLine("║ 3 LIST OF PROCESSING ASSETS                   ║");
+            Console.WriteLine("║                                               ║");
+            Console.WriteLine("║ 9 GO BACK TO MENU                             ║");
+            Console.WriteLine("╚═══════════════════════════════════════════════╝");
+            Console.WriteLine("\n");
+            Console.Write("Insert key value : ");
+
+            ConsoleKey UserInput = Console.ReadKey(true).Key;
+            switch (UserInput)
+            {
+                case ConsoleKey.D1:
+                case ConsoleKey.NumPad1:
+                    RenderParametersInterday(null, null, true);
+                    break;
+
+                case ConsoleKey.D2:
+                case ConsoleKey.NumPad2:
+                    RenderParametersInterday();
+                    break;
+
+                case ConsoleKey.D3:
+                case ConsoleKey.NumPad3:
+                    ListRegisteredAssets();
+                    break;
+
+                case ConsoleKey.D9:
+                case ConsoleKey.NumPad9:
+                    new Program().StartApp();
+                    break;
+
+                default:
+                    new StockQuote().IntradayScreen("Invalid input value... Try Again!", "E");
+                    break;
+            }
+        }
+
+        public void RenderParametersInterday(string outputMsg = null, string status = null, bool loadListAsset = default(bool))
+        {
+            DateTime begintDate = DateTime.Now.Date;
+            DateTime endDate = DateTime.Now.Date;
+            
+            Console.Clear();
+            new LineColorAlert().Render(outputMsg, status);
+            Console.WriteLine("\n");
+            Console.WriteLine("╔═══════════════════════════════════════════════╗");
+            Console.WriteLine("║ 1 INTERDAY (LAST 1 WEEK)                      ║");
+            Console.WriteLine("║                                               ║");
+            Console.WriteLine("║ 2 INTERDAY (LAST 30 DAYS)                     ║");
+            Console.WriteLine("║                                               ║");
+            Console.WriteLine("║ 3 INTERDAY (LAST 1 YEAR)                      ║");
+            Console.WriteLine("║                                               ║");
+            Console.WriteLine("║ 4 INTERDAY (LAST 5 YEARS)                     ║");
+            Console.WriteLine("║                                               ║");
+            Console.WriteLine("║ 5 INTERDAY (LAST 10 YEARS)                    ║");
+            Console.WriteLine("║                                               ║");
+            Console.WriteLine("║ 6 INTERDAY (ALL)                              ║");
+            Console.WriteLine("║                                               ║");
+            Console.WriteLine("║ 9 GO BACK TO MENU                             ║");
+            Console.WriteLine("║                                               ║");
+            Console.WriteLine("║ 0 EXIT                                        ║");
+            Console.WriteLine("╚═══════════════════════════════════════════════╝");
+            Console.WriteLine("\n");
+            Console.Write("Insert key value : ");
+
+            ConsoleKey UserInput = Console.ReadKey(true).Key;
+            switch (UserInput)
+            {
+                case ConsoleKey.D1:
+                case ConsoleKey.NumPad1:
+                    begintDate = begintDate.AddDays(-5);
+                    new InterdayController().InterdayManager(loadListAsset, begintDate, endDate);
+                    break;
+
+                case ConsoleKey.D2:
+                case ConsoleKey.NumPad2:
+                    begintDate = begintDate.AddDays(-30);
+                    new InterdayController().InterdayManager(loadListAsset, begintDate, endDate);
+                    break;
+
+                case ConsoleKey.D3:
+                case ConsoleKey.NumPad3:
+                    begintDate = begintDate.AddDays(-365);
+                    new InterdayController().InterdayManager(loadListAsset, begintDate, endDate);
+                    break;
+
+                case ConsoleKey.D4:
+                case ConsoleKey.NumPad4:
+                    begintDate = begintDate.AddDays(-1825);
+                    new InterdayController().InterdayManager(loadListAsset, begintDate, endDate);
+                    break;
+
+                case ConsoleKey.D5:
+                case ConsoleKey.NumPad5:
+                    //begintDate = begintDate.GetValueOrDefault();
+                    //new InterdayController().InterdayManager(loadListAsset, begintDate, endDate);
+                    break;
+
+                case ConsoleKey.D9:
+                case ConsoleKey.NumPad9:
+                    InterdayScreen();
+                    break;
+
+                case ConsoleKey.D0:
+                case ConsoleKey.NumPad0:
+                    Environment.Exit(0);
+                    break;
+
+                default:
+                    new StockQuote().RenderParametersInterday("Invalid input value... Try Again!", "E");
+                    break;
+            }
+        }
+
+        public void RunningInterdayScreen(string asset)
+        {
+            new LineColorLine().Green("[Processed] - ");
+            new LineColorLine().White(asset + "\n");
+        }
+
+        #endregion
     }
 }

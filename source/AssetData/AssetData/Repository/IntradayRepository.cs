@@ -10,7 +10,7 @@ namespace AssetData.Repository
 {
     class IntradayRepository
     {
-        public void IntradaySave(int idtAsset, IntradayItem i)
+        public void Save(int idtAsset, IntradayItem i)
         {
             var config = new Utils().ReadTokensAppsettings();
             string strConnectionString = config.GetSection("Conn:DB").Value;
