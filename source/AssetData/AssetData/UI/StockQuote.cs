@@ -2,6 +2,7 @@
 using AssetData.Repository;
 using System;
 using System.Collections.Generic;
+using AssetData.Util;
 
 namespace AssetData.UI
 {
@@ -54,7 +55,7 @@ namespace AssetData.UI
             }
         }
 
-        
+
         private void ListRegisteredAssets(string outputMsg = null, string status = null)
         {
             if (outputMsg is null)
@@ -268,11 +269,12 @@ namespace AssetData.UI
         {
             DateTime begintDate = DateTime.Now.Date;
             DateTime endDate = DateTime.Now.Date;
-            
+
             Console.Clear();
             new LineColorAlert().Render(outputMsg, status);
             Console.WriteLine("\n");
             Console.WriteLine("╔═══════════════════════════════════════════════╗");
+            new LineColorLine().Yellow("\t[!] Slow Function Execution [!]\n\n");
             Console.WriteLine("║ 1 INTERDAY (LAST 1 WEEK)                      ║");
             Console.WriteLine("║                                               ║");
             Console.WriteLine("║ 2 INTERDAY (LAST 30 DAYS)                     ║");
@@ -321,8 +323,14 @@ namespace AssetData.UI
 
                 case ConsoleKey.D5:
                 case ConsoleKey.NumPad5:
-                    //begintDate = begintDate.GetValueOrDefault();
-                    //new InterdayController().InterdayManager(loadListAsset, begintDate, endDate);
+                    begintDate = begintDate.AddDays(-3650);
+                    new InterdayController().InterdayManager(begintDate, endDate, loadListAsset);
+                    break;
+
+                case ConsoleKey.D6:
+                case ConsoleKey.NumPad6:
+                    begintDate = Convert.ToDateTime("2000-01-01");
+                    new InterdayController().InterdayManager(begintDate, endDate, loadListAsset);
                     break;
 
                 case ConsoleKey.D9:
@@ -341,10 +349,26 @@ namespace AssetData.UI
             }
         }
 
-        public void RunningInterdayScreen(string asset)
+        public void RunningInterdayScreen(string asset, StatusScreen status)
         {
-            new LineColorLine().Green("[Processed] - ");
-            new LineColorLine().White(asset + "\n");
+            switch (status)
+            {
+                case StatusScreen.Success:
+                    new LineColorLine().Green("[Processed] - ");
+                    new LineColorLine().White(asset + "\n");
+                    break;
+
+                case StatusScreen.Warning:
+                    new LineColorLine().Yellow("[Warning] - ");
+                    new LineColorLine().White(asset + "\n");
+                    break;
+
+                case StatusScreen.Error:
+                    new LineColorLine().Red("[Error] - ");
+                    new LineColorLine().White(asset + "\n");
+                    break;
+            }
+
         }
 
         #endregion

@@ -5,6 +5,7 @@ using AssetData.UI;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using AssetData.Util;
 
 namespace AssetData.Business
 {
@@ -27,19 +28,36 @@ namespace AssetData.Business
             
             for (int y = 0; y < listAssets.Count; y++)
             {
-                //RequestApi
-                Interday interday = new InterdayController().GetInterday(listAssets[y].idt, begintDate, endDate);
-
-                if (interday.data != null)
+                Interday interday = new Interday();
+                try
                 {
-                    for (int x = 0; x < interday.data.Count; x++)
-                    {
-                        bool dataVerification = new InterdayRepository().InterdayVerification(interday.data[x].date, listAssets[y].idt);
-                        if (!dataVerification)
-                            new InterdayRepository().Save(listAssets[y].idt, interday.data[x]);
-                    }
+                    //RequestApi
+                    interday = new InterdayController().GetInterday(listAssets[y].idt, begintDate, endDate);
                 }
-                new StockQuote().RunningInterdayScreen($"{listAssets[y].asset} - {listAssets[y].companyAbvName}");
+                catch(Exception exReq)
+                {
+                    new StockQuote().RunningInterdayScreen($"{listAssets[y].asset} - {listAssets[y].companyAbvName}", StatusScreen.Error);
+                    new ExceptionRepository().Save($"{listAssets[y].asset} || Interday Request Error --> {exReq.Message}");
+                }
+
+                try
+                {
+                    if (interday.data != null)
+                    {
+                        for (int x = 0; x < interday.data.Count; x++)
+                        {
+                            bool dataVerification = new InterdayRepository().InterdayVerification(interday.data[x].date, listAssets[y].idt);
+                            if (!dataVerification)
+                                new InterdayRepository().Save(listAssets[y].idt, interday.data[x]);
+                        }
+                    }
+                    new StockQuote().RunningInterdayScreen($"{listAssets[y].asset} - {listAssets[y].companyAbvName}", StatusScreen.Success);
+                }
+                catch (Exception exReqBD)
+                {
+                    new StockQuote().RunningInterdayScreen($"{listAssets[y].asset} - {listAssets[y].companyAbvName}", StatusScreen.Warning);
+                    new ExceptionRepository().Save($"{listAssets[y].asset} || Interday Repository Error --> {exReqBD.Message}");
+                }
             }
 
             new MainMenu().GoBackMainMenu();

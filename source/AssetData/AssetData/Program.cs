@@ -1,4 +1,5 @@
 ﻿using AssetData.Business;
+using AssetData.Repository;
 using AssetData.UI;
 using System;
 using System.Threading;
@@ -45,13 +46,32 @@ namespace AssetData
                         throw new Exception("Function empty...");
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("\n\n\t ERROR");
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine(" ||> " + DateTime.Now + " --> " + e.Message);
+                Console.WriteLine($" ||> {DateTime.Now} --> {ex.Message}");
+
+                try
+                {
+                    switch (ex.Message)
+                    {
+                        case ("Invalid input value..."):
+                            break;
+
+                        default:
+                            new ExceptionRepository().Save(ex.Message);
+                            break;
+                    }
+                }
+                catch (Exception exLog)
+                {
+                    new LineColorLine().Yellow($"\n\n ||> {DateTime.Now} --> Error log error: ");
+                    Console.Write(exLog.Message);
+                }
+
                 Console.ReadKey();
             }
         }
