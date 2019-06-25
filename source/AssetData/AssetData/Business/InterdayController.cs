@@ -13,7 +13,7 @@ namespace AssetData.Business
     {
         public void InterdayManager(DateTime begintDate, DateTime endDate, bool loadListAsset = default(bool))
         {
-            new StockQuote().RunInterday($"Start Date: {string.Format("{0:d}", begintDate)} ~ End Data: {string.Format("{0:d}", endDate)}\n\n");
+            new StockQuoteMenu().RunInterday($"Start Date: {string.Format("{0:d}", begintDate)} ~ End Data: {string.Format("{0:d}", endDate)}\n\n");
 
             List<AssetItem> listAssets;
 
@@ -36,7 +36,7 @@ namespace AssetData.Business
                 }
                 catch(Exception exReq)
                 {
-                    new StockQuote().RunningInterdayScreen($"{listAssets[y].asset} - {listAssets[y].companyAbvName}", StatusScreen.Error);
+                    new StockQuoteMenu().RunningInterdayScreen($"{listAssets[y].asset} - {listAssets[y].companyAbvName}", StatusScreen.Error);
                     new ExceptionRepository().Save($"{listAssets[y].asset} || Interday Request Error --> {exReq.Message}");
                 }
 
@@ -51,11 +51,11 @@ namespace AssetData.Business
                                 new InterdayRepository().Save(listAssets[y].idt, interday.data[x]);
                         }
                     }
-                    new StockQuote().RunningInterdayScreen($"{listAssets[y].asset} - {listAssets[y].companyAbvName}", StatusScreen.Success);
+                    new StockQuoteMenu().RunningInterdayScreen($"{listAssets[y].asset} - {listAssets[y].companyAbvName}", StatusScreen.Success);
                 }
                 catch (Exception exReqBD)
                 {
-                    new StockQuote().RunningInterdayScreen($"{listAssets[y].asset} - {listAssets[y].companyAbvName}", StatusScreen.Warning);
+                    new StockQuoteMenu().RunningInterdayScreen($"{listAssets[y].asset} - {listAssets[y].companyAbvName}", StatusScreen.Warning);
                     new ExceptionRepository().Save($"{listAssets[y].asset} || Interday Repository Error --> {exReqBD.Message}");
                 }
             }

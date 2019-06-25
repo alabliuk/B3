@@ -9,7 +9,7 @@ namespace AssetData.UI
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Red;
 
-            Console.Write("▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ Asset Service v0.2 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒");
+            Console.Write("▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ Asset Service v0.3 ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒");
             Console.ResetColor();
             Console.WriteLine("\n\n\n");
             Console.WriteLine("╔═══════════════════════════════════════════════╗");
@@ -44,7 +44,7 @@ namespace AssetData.UI
             new LineColorAlert().Render(outputMsg, status);
             Console.WriteLine("\n");
             Console.WriteLine("╔═══════════════════════════════════════════════╗");
-            Console.WriteLine("║ 1 GO BACK TO MENU                             ║");
+            Console.WriteLine("║ 9 GO BACK TO MENU                             ║");
             Console.WriteLine("║                                               ║");
             Console.WriteLine("║ 0 EXIT                                        ║");
             Console.WriteLine("╚═══════════════════════════════════════════════╝");
@@ -55,8 +55,8 @@ namespace AssetData.UI
             ConsoleKey UserInput = Console.ReadKey(true).Key;
             switch (UserInput)
             {
-                case ConsoleKey.D1:
-                case ConsoleKey.NumPad1:
+                case ConsoleKey.D9:
+                case ConsoleKey.NumPad9:
                     new Program().StartApp();
                     break;
 

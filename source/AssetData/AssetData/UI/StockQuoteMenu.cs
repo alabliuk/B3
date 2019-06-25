@@ -6,7 +6,7 @@ using AssetData.Util;
 
 namespace AssetData.UI
 {
-    class StockQuote
+    class StockQuoteMenu
     {
         #region Share Screens
         public void Render(string outputMsg = null, string status = null)
@@ -50,7 +50,7 @@ namespace AssetData.UI
                     break;
 
                 default:
-                    new StockQuote().Render("Invalid input value... Try Again!", "E");
+                    new StockQuoteMenu().Render("Invalid input value... Try Again!", "E");
                     break;
             }
         }
@@ -92,7 +92,7 @@ namespace AssetData.UI
                     break;
 
                 default:
-                    new StockQuote().ListRegisteredAssets("Invalid input value... Try Again!", "E");
+                    new StockQuoteMenu().ListRegisteredAssets("Invalid input value... Try Again!", "E");
                     break;
             }
         }
@@ -174,7 +174,7 @@ namespace AssetData.UI
                     break;
 
                 default:
-                    new StockQuote().IntradayScreen("Invalid input value... Try Again!", "E");
+                    new StockQuoteMenu().IntradayScreen("Invalid input value... Try Again!", "E");
                     break;
             }
         }
@@ -260,12 +260,12 @@ namespace AssetData.UI
                     break;
 
                 default:
-                    new StockQuote().IntradayScreen("Invalid input value... Try Again!", "E");
+                    new StockQuoteMenu().IntradayScreen("Invalid input value... Try Again!", "E");
                     break;
             }
         }
 
-        public void RenderParametersInterday(string outputMsg = null, string status = null, bool loadListAsset = default(bool))
+        private void RenderParametersInterday(string outputMsg = null, string status = null, bool loadListAsset = default(bool))
         {
             DateTime begintDate = DateTime.Now.Date;
             DateTime endDate = DateTime.Now.Date;
@@ -274,7 +274,9 @@ namespace AssetData.UI
             new LineColorAlert().Render(outputMsg, status);
             Console.WriteLine("\n");
             Console.WriteLine("╔═══════════════════════════════════════════════╗");
+            Console.WriteLine("║                                               ║");
             new LineColorLine().Yellow("\t[!] Slow Function Execution [!]\n\n");
+            Console.WriteLine("║                                               ║");
             Console.WriteLine("║ 1 INTERDAY (LAST 1 WEEK)                      ║");
             Console.WriteLine("║                                               ║");
             Console.WriteLine("║ 2 INTERDAY (LAST 30 DAYS)                     ║");
@@ -344,7 +346,7 @@ namespace AssetData.UI
                     break;
 
                 default:
-                    new StockQuote().RenderParametersInterday("Invalid input value... Try Again!", "E");
+                    new StockQuoteMenu().RenderParametersInterday("Invalid input value... Try Again!", "E");
                     break;
             }
         }
@@ -368,7 +370,6 @@ namespace AssetData.UI
                     new LineColorLine().White(asset + "\n");
                     break;
             }
-
         }
 
         #endregion

@@ -33,14 +33,14 @@ namespace AssetData.Business
                             new IntradayRepository().Save(listAssets[y].idt, intraday.data[x]);
                     }
                 }
-                new StockQuote().RunningIntradayScreen(outputMsg, status, $"PROCESS: {listAssets[y].asset}");
+                new StockQuoteMenu().RunningIntradayScreen(outputMsg, status, $"PROCESS: {listAssets[y].asset}");
             }
 
-            new StockQuote().RunningIntradayScreen("Waiting...", "W", $"Next Process: {DateTime.Now.AddMinutes(5)}");
+            new StockQuoteMenu().RunningIntradayScreen("Waiting...", "W", $"Next Process: {DateTime.Now.AddMinutes(5)}");
             Thread.Sleep(60000);
         }
 
-        public Intraday GetIntraday(int idtAsset)
+        private Intraday GetIntraday(int idtAsset)
         {
             Intraday intraday = new Intraday();
             string urlRequest = new Utils().UrlBuild("API_Access:UrlBase", "API_Access:IntradayService", idtAsset.ToString());
