@@ -29,11 +29,11 @@ namespace AssetData
                         break;
 
                     case 2:
-                        new StockQuote().Render();
+                        new StockQuoteMenu().Render();
                         break;
 
                     case 3:
-                        new Exchange().Render();
+                        new ExchangeMenu().Render();
                         break;
 
                     case 0:
