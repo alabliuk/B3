@@ -25,7 +25,7 @@ namespace AssetData.Business
             {
                 listAssets = new AssetRepository().GetAllAssets();
             }
-            
+
             for (int y = 0; y < listAssets.Count; y++)
             {
                 Interday interday = new Interday();
@@ -34,9 +34,9 @@ namespace AssetData.Business
                     //RequestApi
                     interday = new InterdayController().GetInterday(listAssets[y].idt, begintDate, endDate);
                 }
-                catch(Exception exReq)
+                catch (Exception exReq)
                 {
-                    new StockQuoteMenu().RunningInterdayScreen($"{listAssets[y].asset} - {listAssets[y].companyAbvName}", StatusScreen.Error);
+                    new LineColorLine().PrintResult($"{listAssets[y].asset} - {listAssets[y].companyAbvName}", StatusScreen.Error);
                     new ExceptionRepository().Save($"{listAssets[y].asset} || Interday Request Error --> {exReq.Message}");
                 }
 
@@ -51,11 +51,11 @@ namespace AssetData.Business
                                 new InterdayRepository().Save(listAssets[y].idt, interday.data[x]);
                         }
                     }
-                    new StockQuoteMenu().RunningInterdayScreen($"{listAssets[y].asset} - {listAssets[y].companyAbvName}", StatusScreen.Success);
+                    new LineColorLine().PrintResult($"{listAssets[y].asset} - {listAssets[y].companyAbvName}", StatusScreen.Success);
                 }
                 catch (Exception exReqBD)
                 {
-                    new StockQuoteMenu().RunningInterdayScreen($"{listAssets[y].asset} - {listAssets[y].companyAbvName}", StatusScreen.Warning);
+                    new LineColorLine().PrintResult($"{listAssets[y].asset} - {listAssets[y].companyAbvName}", StatusScreen.Warning);
                     new ExceptionRepository().Save($"{listAssets[y].asset} || Interday Repository Error --> {exReqBD.Message}");
                 }
             }

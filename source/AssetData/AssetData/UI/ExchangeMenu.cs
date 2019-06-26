@@ -91,25 +91,25 @@ namespace AssetData.UI
                 case ConsoleKey.D2:
                 case ConsoleKey.NumPad2:
                     begintDate = begintDate.AddDays(-365);
-                    //new InterdayController().InterdayManager(begintDate, endDate, loadListAsset);
+                    new ExchangeController().ExchangeManager(begintDate, endDate);
                     break;
 
                 case ConsoleKey.D3:
                 case ConsoleKey.NumPad3:
                     begintDate = begintDate.AddDays(-1825);
-                    //new InterdayController().InterdayManager(begintDate, endDate, loadListAsset);
+                    new ExchangeController().ExchangeManager(begintDate, endDate);
                     break;
 
                 case ConsoleKey.D4:
                 case ConsoleKey.NumPad4:
                     begintDate = begintDate.AddDays(-3650);
-                    //new InterdayController().InterdayManager(begintDate, endDate, loadListAsset);
+                    new ExchangeController().ExchangeManager(begintDate, endDate);
                     break;
 
                 case ConsoleKey.D5:
                 case ConsoleKey.NumPad5:
                     begintDate = Convert.ToDateTime("2000-01-01");
-                    //new InterdayController().InterdayManager(begintDate, endDate, loadListAsset);
+                    new ExchangeController().ExchangeManager(begintDate, endDate);
                     break;
 
                 case ConsoleKey.D9:
@@ -128,10 +128,15 @@ namespace AssetData.UI
             }
         }
 
-        private void RenderCurrencieList(string outputMsg = null, string status = null)
+        public void RenderLoadingMarketCurrencies()
         {
             Console.Clear();
             new LineColorLine().Bold("\n\nLoading market currencies...");
+        }
+
+        public void RenderCurrencieList(string outputMsg = null, string status = null)
+        {
+            RenderLoadingMarketCurrencies();
             List<string> exList = new ExchangeRepository().GetAllCurrencies();
             Console.Clear();
             new LineColorAlert().Render(outputMsg, status);
@@ -145,7 +150,7 @@ namespace AssetData.UI
             }
 
             Console.WriteLine("\n");
-            Console.Write("║ 1 RELOAD LIST  "); new LineColorLine().Cyan("(Check for Updates)");
+            Console.Write("║ 1 RELOAD LIST  "); new LineColorLine().Green("(Check for Updates)");
             Console.WriteLine("            ║");
             Console.WriteLine("║                                               ║");
             Console.WriteLine("║ 9 GO BACK                                     ║");
@@ -158,7 +163,8 @@ namespace AssetData.UI
             {
                 case ConsoleKey.D1:
                 case ConsoleKey.NumPad1:
-                    new ExchangeController().UpdateCurrenciesList();
+                    RenderLoadingMarketCurrencies();
+                    new ExchangeController().UpdateCurrencyList();
                     break;
 
                 case ConsoleKey.D9:
@@ -170,6 +176,13 @@ namespace AssetData.UI
                     new ExchangeMenu().RenderCurrencieList("Invalid input value... Try Again!", "E");
                     break;
             }
+        }
+
+        public void RunExchange(string dateRange)
+        {
+            Console.Clear();
+            new LineColorLine().Bold("\n\nLoading market exchange rates...\n");
+            new LineColorLine().Cyan(dateRange);
         }
     }
 }

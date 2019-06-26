@@ -351,27 +351,6 @@ namespace AssetData.UI
             }
         }
 
-        public void RunningInterdayScreen(string asset, StatusScreen status)
-        {
-            switch (status)
-            {
-                case StatusScreen.Success:
-                    new LineColorLine().Green("[Processed] - ");
-                    new LineColorLine().White(asset + "\n");
-                    break;
-
-                case StatusScreen.Warning:
-                    new LineColorLine().Yellow("[Warning] - ");
-                    new LineColorLine().White(asset + "\n");
-                    break;
-
-                case StatusScreen.Error:
-                    new LineColorLine().Red("[Error] - ");
-                    new LineColorLine().White(asset + "\n");
-                    break;
-            }
-        }
-
         #endregion
     }
 }

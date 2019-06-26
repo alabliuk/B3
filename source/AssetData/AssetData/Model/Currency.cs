@@ -2,16 +2,16 @@
 
 namespace AssetData.Model
 {
-    public class ExchangeItem
+    public class CurrencyItem
     {
+        public string id { get; set; }
         public string simbolo { get; set; }
         public string nomeFormatado { get; set; }
         public string tipoMoeda { get; set; }
     }
 
-    public class Exchange
+    public class Currency
     {
-        //public string __invalid_name__@odata.context { get; set; }
-        public List<ExchangeItem> value { get; set; }
+        public List<CurrencyItem> value { get; set; }
     }
 }
