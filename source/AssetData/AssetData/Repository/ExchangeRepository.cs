@@ -67,6 +67,28 @@ namespace AssetData.Repository
             return !dataVerification;
         }
 
+        public bool CurrencyRateIsNew(CurrencyRateItem cRateItem, string isoCode)
+        {
+            var config = new Utils().ReadTokensAppsettings();
+            bool dataVerification;
+            string strConnectionString = config.GetSection("Conn:DB").Value;
+
+            string sql = "SELECT COUNT(1) FROM CurrencyRate WHERE isoCode = @isoCode AND dataHoraCotacao = @dataHoraCotacao";
+
+            using (IDbConnection conn = new SqlConnection(strConnectionString))
+            {
+                var vParams = new DynamicParameters();
+                vParams.Add("@isoCode", isoCode);
+                vParams.Add("@dataHoraCotacao", cRateItem.dataHoraCotacao);
+
+                if (conn.State == ConnectionState.Closed)
+                    conn.Open();
+
+                dataVerification = conn.Query<bool>(sql, vParams).FirstOrDefault();
+            }
+            return !dataVerification;
+        }
+
         public bool CurrencyIsUpdated(CurrencyItem ex)
         {
             var config = new Utils().ReadTokensAppsettings();
@@ -114,20 +136,23 @@ namespace AssetData.Repository
             }
         }
 
-        public void SaveCurrencyRate(CurrencyItem exItem)
+        public void SaveCurrencyRate(CurrencyRateItem cRateItem, string isoCode)
         {
             var config = new Utils().ReadTokensAppsettings();
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
-            string sql = "INSERT INTO Currencies (isoCode, name, type, createDate, updateDate) " +
-                "VALUES (@isoCode, @name, @type, GETDATE(), GETDATE())";
+            string sql = "INSERT INTO CurrencyRate (isoCode, paridadeCompra, paridadeVenda, cotacaoCompra, cotacaoVenda, dataHoraCotacao) " +
+                "VALUES (@isoCode, @paridadeCompra, @paridadeVenda, @cotacaoCompra, @cotacaoVenda, @dataHoraCotacao)";
 
             using (IDbConnection conn = new SqlConnection(strConnectionString))
             {
                 var vParams = new DynamicParameters();
-                vParams.Add("@isoCode", exItem.simbolo);
-                vParams.Add("@name", exItem.nomeFormatado);
-                vParams.Add("@type", exItem.tipoMoeda);
+                vParams.Add("@isoCode", isoCode);
+                vParams.Add("@paridadeCompra", cRateItem.paridadeCompra);
+                vParams.Add("@paridadeVenda", cRateItem.paridadeVenda);
+                vParams.Add("@cotacaoCompra", cRateItem.cotacaoCompra);
+                vParams.Add("@cotacaoVenda", cRateItem.cotacaoVenda);
+                vParams.Add("@dataHoraCotacao", cRateItem.dataHoraCotacao);
 
                 if (conn.State == ConnectionState.Closed)
                     conn.Open();

@@ -38,9 +38,9 @@ namespace AssetData.Business
                     {
                         for (int x = 0; x < cRate.value.Count; x++)
                         {
-                            //bool dataVerification = new ExchangeRepository().InterdayVerification(interday.data[x].date, listAssets[y].idt);
-                            //if (!dataVerification)
-                            //    new InterdayRepository().Save(listAssets[y].idt, interday.data[x]);
+                            bool isNew = new ExchangeRepository().CurrencyRateIsNew(cRate.value[x], cItem[y].simbolo);
+                            if (isNew)
+                                new ExchangeRepository().SaveCurrencyRate(cRate.value[x], cItem[y].simbolo);
                         }
                     }
                     new LineColorLine().PrintResult($"{cItem[y].simbolo} - {cItem[y].nomeFormatado}", StatusScreen.Success);
