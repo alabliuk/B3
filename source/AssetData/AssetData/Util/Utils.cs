@@ -15,6 +15,15 @@ namespace AssetData.Service
             return config;
         }
 
+        public IConfigurationRoot ReadTokensConnsettings()
+        {
+            var builder = new ConfigurationBuilder()
+                     .SetBasePath(Directory.GetCurrentDirectory())
+                     .AddJsonFile($"connsettings.json");
+            var config = builder.Build();
+            return config;
+        }
+
         public string UrlBuild(string urlBase, string urlFinal, string _assetIdt = null)
         {
             var config = new Utils().ReadTokensAppsettings();

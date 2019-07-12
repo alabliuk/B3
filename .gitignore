@@ -423,3 +423,5 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+/database/ExecuteAllScripts.bat
+/source/AssetData/AssetData/connsettings.json
