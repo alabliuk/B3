@@ -12,7 +12,7 @@ namespace AssetData.Repository
     {
         public bool Delete(string assetCode)
         {
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             bool dataVerification;
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
@@ -33,7 +33,7 @@ namespace AssetData.Repository
 
         public void Save(string assetCode)
         {
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
             string sql = "INSERT INTO ProcessingAssets (assetCode, createDate) " +
@@ -53,7 +53,7 @@ namespace AssetData.Repository
 
         public bool AssetVerification(string assetCode)
         {
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             bool asset = false;
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
@@ -75,7 +75,7 @@ namespace AssetData.Repository
         public List<string> AssetList()
         {
             List<string> asset;
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
             string sql = "SELECT A.asset + ' - ' + A.companyAbvName as assetName FROM Assets A INNER JOIN ProcessingAssets I ON A.asset = I.assetCode";
@@ -93,7 +93,7 @@ namespace AssetData.Repository
         public List<AssetItem> ProcessingAssetList()
         {
             List<AssetItem> asset;
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
             string sql = "SELECT A.idt, A.asset, A.companyAbvName FROM Assets A INNER JOIN ProcessingAssets I ON A.asset = I.assetCode";

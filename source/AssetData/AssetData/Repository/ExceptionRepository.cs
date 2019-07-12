@@ -10,7 +10,7 @@ namespace AssetData.Repository
     {
         public void Save(string ex)
         {
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
             string sql = "INSERT INTO Exceptions (Date, Exception) " +

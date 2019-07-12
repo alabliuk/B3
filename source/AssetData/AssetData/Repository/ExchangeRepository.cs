@@ -13,7 +13,7 @@ namespace AssetData.Repository
         public List<string> GetAllCurrencies()
         {
             List<string> currencies;
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
             string sql = "SELECT CONCAT('[', type, '] ', isoCode, ' - ' ,name) FROM Currencies order by type, isoCode ASC";
@@ -31,7 +31,7 @@ namespace AssetData.Repository
         public List<CurrencyItem> GetAllCurrenciesObject()
         {
             List<CurrencyItem> currencies;
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
             string sql = "SELECT id, isoCode AS simbolo, [name] AS nomeFormatado, [type] AS tipoMoeda FROM Currencies";
@@ -48,7 +48,7 @@ namespace AssetData.Repository
 
         public bool CurrencyIsNew(CurrencyItem exItem)
         {
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             bool dataVerification;
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
@@ -69,7 +69,7 @@ namespace AssetData.Repository
 
         public bool CurrencyRateIsNew(CurrencyRateItem cRateItem, string isoCode)
         {
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             bool dataVerification;
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
@@ -91,7 +91,7 @@ namespace AssetData.Repository
 
         public bool CurrencyIsUpdated(CurrencyItem ex)
         {
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             bool dataVerification;
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
@@ -116,7 +116,7 @@ namespace AssetData.Repository
 
         public void SaveCurrency(CurrencyItem exItem)
         {
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
             string sql = "INSERT INTO Currencies (isoCode, name, type, createDate, updateDate) " +
@@ -138,7 +138,7 @@ namespace AssetData.Repository
 
         public void SaveCurrencyRate(CurrencyRateItem cRateItem, string isoCode)
         {
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
             string sql = "INSERT INTO CurrencyRate (isoCode, paridadeCompra, paridadeVenda, cotacaoCompra, cotacaoVenda, dataHoraCotacao) " +
@@ -163,7 +163,7 @@ namespace AssetData.Repository
 
         public void UpdateCurrency(CurrencyItem exItem)
         {
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
             string sql = "UPDATE Currencies SET isoCode = @isoCode, [name] = @name, [type] = @type, updateDate = GETDATE()" +
@@ -186,7 +186,7 @@ namespace AssetData.Repository
 
         public void SaveUpdateLog(CurrencyItem exItem)
         {
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
             string sql = "INSERT INTO CurrenciesUpdateLog (isoCode, name, type, createDate) " +
@@ -209,7 +209,7 @@ namespace AssetData.Repository
         public CurrencyItem GetOld(string isoCode)
         {
             CurrencyItem exItem = new CurrencyItem();
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
             string sql = "SELECT isoCode AS simbolo, [name] AS nomeFormatado, [type] AS tipoMoeda FROM Currencies WHERE isoCode = @isoCode";

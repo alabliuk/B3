@@ -11,7 +11,7 @@ namespace AssetData.Repository
     {
         public bool InterdayVerification(long unixTime, int idtAsset)
         {
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             bool dataVerification;
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
@@ -33,7 +33,7 @@ namespace AssetData.Repository
 
         public void Save(int idtAsset, InterdayItem i)
         {
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
             string sql = "INSERT INTO Interday (idtAsset, date, unixTime, price, low, high, var, varpct, vol) " +

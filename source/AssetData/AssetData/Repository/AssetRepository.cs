@@ -12,7 +12,7 @@ namespace AssetData.Repository
     {
         public bool AssetVerification(int idt)
         {
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             bool asset = false;
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
@@ -33,7 +33,7 @@ namespace AssetData.Repository
 
         public bool AssetVerification(string codeAsset)
         {
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             bool asset = false;
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
@@ -54,7 +54,7 @@ namespace AssetData.Repository
 
         public bool AssetIsUpdated(AssetItem assets)
         {
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             bool asset = false;
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
@@ -80,7 +80,7 @@ namespace AssetData.Repository
 
         public void AssetSave(AssetItem assets)
         {
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
             string sql = "INSERT INTO ASSETS (idt, code, asset, companyName, companyAbvName, createDate, updateDate) " +
@@ -105,7 +105,7 @@ namespace AssetData.Repository
         public AssetItem AssetGetOld(int idt)
         {
             AssetItem asset = new AssetItem();
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
             string sql = "SELECT idt, code, asset, companyName, companyAbvName " +
@@ -126,7 +126,7 @@ namespace AssetData.Repository
 
         public void AssetSaveLog(AssetItem assetOld)
         {
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
             string sqlInsert = "INSERT INTO AssetsUpdateLog (idt, code, asset, companyName, companyAbvName, createDate) " +
@@ -150,7 +150,7 @@ namespace AssetData.Repository
 
         public void AssetUpdate(AssetItem assetNew)
         {
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
             string sql = "UPDATE ASSETS SET " +
@@ -176,7 +176,7 @@ namespace AssetData.Repository
         public List<AssetItem> GetAllAssets()
         {
             List<AssetItem> asset;
-            var config = new Utils().ReadTokensAppsettings();
+            var config = new Utils().ReadTokensConnsettings();
             string strConnectionString = config.GetSection("Conn:DB").Value;
 
             string sql = "SELECT A.idt, A.asset, A.companyAbvName FROM Assets A";
