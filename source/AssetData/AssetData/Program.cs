@@ -1,6 +1,7 @@
 ﻿using AssetData.Business;
 using AssetData.Repository;
 using AssetData.UI;
+using AssetData.Util;
 using System;
 using System.Threading;
 
@@ -17,6 +18,8 @@ namespace AssetData
         {
             try
             {
+                new QuickEditConsole().DisableQuickEdit();
+
                 int UserInputNumber = new MainMenu().Render();
                 Console.Clear();
                 switch (UserInputNumber)
