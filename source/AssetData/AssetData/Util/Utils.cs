@@ -49,5 +49,15 @@ namespace AssetData.Service
         {
             return datetime.ToUniversalTime().Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
         }
+
+        public int ConvertMinutesToMillis(int min)
+        {
+            return min * 60000;
+        }
+
+        public int ConvertStringToInt(string str)
+        {
+            return Convert.ToInt32(str);
+        }
     }
 }

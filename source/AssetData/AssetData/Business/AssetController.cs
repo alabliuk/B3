@@ -52,6 +52,7 @@ namespace AssetData.Business
                     {
                         new LineColorLine().Red("ERRO: ");
                         Console.WriteLine(assetsApi.data[x].code + " - " + assetsApi.data[x].companyName);
+                        Console.WriteLine($" - Details: {e.Message}");
                         error++;
                     }
                 }

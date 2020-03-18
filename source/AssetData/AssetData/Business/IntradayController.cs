@@ -13,6 +13,7 @@ namespace AssetData.Business
     {
         public void IntradayManager()
         {
+            var config = new Utils().ReadTokensAppsettings();
             string outputMsg = "Running Intraday Service...";
             string status = "R";
             string asset = string.Empty;
@@ -36,8 +37,12 @@ namespace AssetData.Business
                 new StockQuoteMenu().RunningIntradayScreen(outputMsg, status, $"PROCESS: {listAssets[y].asset}");
             }
 
-            new StockQuoteMenu().RunningIntradayScreen("Waiting...", "W", $"Next Process: {DateTime.Now.AddMinutes(5)}");
-            Thread.Sleep(300000);
+            // Minutos para proxima rodada
+            string WaitMinutesSetting = config.GetSection("Settings:IntradayWaitMinutes").Value;
+            int waitMinutes = new Utils().ConvertStringToInt(WaitMinutesSetting);
+
+            new StockQuoteMenu().RunningIntradayScreen("Waiting...", "W", $"Next Process: {DateTime.Now.AddMinutes(waitMinutes)}");
+            Thread.Sleep(new Utils().ConvertMinutesToMillis(waitMinutes));
         }
 
         private Intraday GetIntraday(int idtAsset)
